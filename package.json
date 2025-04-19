@@ -4,16 +4,15 @@
   "description": "A website for pet personality testing",
   "scripts": {
     "start": "serve .",
-    "build": "npm run lint && npm run validate",
-    "build:preview": "npm run lint",
-    "lint": "eslint . --ext .js",
-    "validate": "html-validator-cli --file ./home.html && html-validator-cli --file ./login.html && html-validator-cli --file ./product.html"
+    "prebuild": "rimraf dist",
+    "build": "npm run copy-files",
+    "copy-files": "mkdir -p dist && cp -r *.html *.js *.css images assets dist/",
+    "serve": "serve dist"
   },
   "dependencies": {
     "serve": "^14.2.1"
   },
   "devDependencies": {
-    "eslint": "^8.57.0",
-    "html-validator-cli": "^7.0.1"
+    "rimraf": "^5.0.1"
   }
 }

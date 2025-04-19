@@ -17,7 +17,7 @@ function log(message, type = 'info') {
 }
 
 const octokit = new Octokit({
-  auth: process.env.GITHUB_TOKEN,
+  auth: process.env.PAT_TOKEN,
   request: {
     retries: 3,
     retryAfter: 5
@@ -30,7 +30,7 @@ const dataPath = path.join(__dirname, '../data');
 
 // 验证环境变量
 function validateEnv() {
-  const requiredEnvVars = ['GITHUB_TOKEN', 'REPO_OWNER', 'REPO_NAME'];
+  const requiredEnvVars = ['PAT_TOKEN', 'REPO_OWNER', 'REPO_NAME'];
   const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
   
   if (missingVars.length > 0) {
