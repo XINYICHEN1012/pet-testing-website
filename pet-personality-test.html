@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pet Personality Test</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#FDCD22',secondary:'#C7A063'},borderRadius:{'none':'0px','sm':'8px',DEFAULT:'12px','md':'16px','lg':'20px','xl':'24px','2xl':'28px','3xl':'32px','full':'9999px','button':'12px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+background-color: #F3E9D8;
+font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+}
+.nav-shadow {
+box-shadow: 0 2px 10px rgba(184, 139, 100, 0.1);
+}
+.card-shadow {
+box-shadow: 0 2px 8px rgba(232, 169, 120, 0.15);
+}
+.option-transition {
+transition: all 0.2s ease;
+}
+.option-transition:active {
+transform: scale(0.98);
+}
+.progress-bar {
+transition: width 0.3s ease;
+}
+.fade-in {
+animation: fadeIn 0.3s ease-in-out;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.main-content {
+padding-top: 60px;
+padding-bottom: 20px;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+</style>
+</head>
+<body class="bg-[#F3E9D8] text-[#71655C]">
+<!-- 导航栏 -->
+<header class="fixed top-0 w-full z-50 bg-[#F3E9D8] nav-shadow">
+<div class="flex items-center justify-between px-4 h-14">
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center cursor-pointer" id="backBtn">
+<i class="ri-arrow-left-s-line text-[#C7A063] ri-lg"></i>
+</div>
+<h1 class="text-[#9D7463] font-medium ml-2">Pet Personality Test</h1>
+</div>
+<div class="flex items-center">
+<div class="bg-[#F7F2E7] px-2 py-1 rounded-full text-xs text-[#9D7463]" id="progressIndicator">
+<span id="currentQuestionNum">0</span>/<span id="totalQuestions">12</span>
+</div>
+</div>
+</div>
+</header>
+<!-- 主要内容区域 -->
+<main class="main-content pb-4 px-4">
+<!-- 测试介绍 -->
+<div class="pt-4 mb-4 fade-in" id="testIntro">
+<div class="bg-[#F7F2E7] rounded-lg p-[clamp(1rem,4vw,1.5rem)] card-shadow w-[clamp(280px,90vw,375px)] mx-auto">
+<div class="flex justify-center mb-[clamp(1rem,4vw,1.5rem)]">
+<img src="https://static.readdy.ai/image/8a28112eba8f5b85c64fe8c774d362c1/4b90e969fd5933c8af4cce15319d572b.png" alt="宠物性格测试" class="w-full h-[clamp(150px,40vw,200px)] object-cover rounded-[clamp(0.5rem,2vw,0.75rem)]">
+</div>
+<h2 class="text-[#9D7463] text-[clamp(1.125rem,3.5vw,1.25rem)] font-medium mb-[clamp(0.5rem,2vw,0.75rem)]">Fun Pet Personality Test</h2>
+<p class="text-[clamp(0.875rem,2.5vw,1rem)] text-[#71655C] mb-[clamp(1rem,4vw,1.5rem)]">Answer a series of fun questions to understand your pet's unique personality traits, and we'll recommend the most suitable pet products for you!</p>
+<div class="space-y-[clamp(0.75rem,3vw,1rem)] mb-[clamp(1rem,4vw,1.5rem)]">
+<div class="flex items-center">
+<div class="w-[clamp(2rem,6vw,2.5rem)] h-[clamp(2rem,6vw,2.5rem)] flex items-center justify-center bg-[#E4C8A3] rounded-full mr-[clamp(0.5rem,2vw,0.75rem)]">
+<i class="ri-emotion-happy-line text-[#9D7463] text-[clamp(1rem,3vw,1.25rem)]"></i>
+</div>
+<span class="text-[clamp(0.875rem,2.5vw,1rem)] text-[#71655C]">Discover Pet's Unique Personality</span>
+</div>
+<div class="flex items-center">
+<div class="w-[clamp(1.5rem,5vw,2rem)] h-[clamp(1.5rem,5vw,2rem)] flex items-center justify-center bg-[#E4C8A3] rounded-full mr-2">
+<i class="ri-shopping-bag-line text-[#9D7463] text-[clamp(0.875rem,2.5vw,1rem)]"></i>
+</div>
+<span class="text-[clamp(0.75rem,2.5vw,0.875rem)] text-[#71655C]">Get Personalized Product Recommendations</span>
+</div>
+<div class="flex items-center">
+<div class="w-[clamp(1.5rem,5vw,2rem)] h-[clamp(1.5rem,5vw,2rem)] flex items-center justify-center bg-[#E4C8A3] rounded-full mr-2">
+<i class="ri-time-line text-[#9D7463] text-[clamp(0.875rem,2.5vw,1rem)]"></i>
+</div>
+<span class="text-[clamp(0.75rem,2.5vw,0.875rem)] text-[#71655C]">Only Takes 3-5 Minutes</span>
+</div>
+</div>
+<button id="startTestBtn" class="w-full py-[clamp(0.75rem,3vw,1rem)] text-[clamp(1rem,3vw,1.125rem)] text-white bg-primary rounded-button font-medium cursor-pointer mb-[clamp(0.75rem,3vw,1rem)]">Start Test</button>
+<a href="home.html" data-readdy="true">
+<button class="w-full py-[clamp(0.75rem,3vw,1rem)] text-[clamp(1rem,3vw,1.125rem)] text-[#9D7463] bg-white border border-[#E4C8A3] rounded-button font-medium cursor-pointer">Back to Home</button>
+</a>
+</div>
+</div>
+<!-- 测试问题区域 -->
+<div id="testContainer" class="hidden">
+<!-- 进度条 -->
+<div class="mb-4">
+<div class="w-full h-2 bg-[#F7F2E7] rounded-full overflow-hidden">
+<div id="progressBar" class="h-full bg-primary progress-bar" style="width: 0%"></div>
+</div>
+</div>
+<!-- 问题容器 -->
+<div id="questionContainer" class="mb-4">
+<!-- 问题将通过JS动态插入 -->
+</div>
+<!-- 操作按钮 -->
+<div class="flex justify-between mt-4">
+<button id="prevBtn" class="px-5 py-3 text-[#9D7463] bg-white border border-[#E4C8A3] rounded-button cursor-pointer">Previous</button>
+<button id="nextBtn" class="px-5 py-3 text-white bg-[#C7A063] rounded-button cursor-pointer">Next</button>
+</div>
+</div>
+<!-- 测试结果 -->
+<div id="testResult" class="hidden fade-in">
+<!-- 结果将通过JS动态插入 -->
+</div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+// 问题数据
+const questions = [
+{
+id: 1,
+question: "Which animal does your pet most resemble?",
+type: "single",
+options: [
+{ value: "A", text: "Lazy Koala (Slow to Warm Up)" },
+{ value: "B", text: "Curious Fox (Explorer)" },
+{ value: "C", text: "Proud Cat (Independent)" },
+{ value: "D", text: "Friendly Dog (Social Butterfly)" }
+]
+},
+{
+id: 2,
+question: "Which home style do you prefer?",
+type: "single",
+options: [
+{ value: "A", text: "Natural Wood (Earth Tones)" },
+{ value: "B", text: "Minimalist Cream (Soft Textures)" },
+{ value: "C", text: "Vintage Handcraft (Clay/Burlap)" },
+{ value: "D", text: "Vibrant Mix (Peach & Apricot Accents)" }
+]
+},
+{
+id: 3,
+question: "What's your pet's favorite treat type?",
+type: "single",
+options: [
+{ value: "A", text: "Hypoallergenic Grain-Free" },
+{ value: "B", text: "Organic Jerky" },
+{ value: "C", text: "Dental Chews" },
+{ value: "D", text: "Fruit & Veggie Mix" }
+]
+},
+{
+id: 4,
+question: "Which ingredients is your pet allergic to? (Multiple Choice)",
+type: "multiple",
+options: [
+{ value: "A", text: "Chicken" },
+{ value: "B", text: "Beef" },
+{ value: "C", text: "Fish" },
+{ value: "D", text: "Grains" },
+{ value: "E", text: "Dairy" }
+]
+},
+{
+id: 5,
+question: "If your pet had an MBTI personality, what would it be?",
+type: "single",
+options: [
+{ value: "A", text: "ISTJ 'Practical Manager' → Values Functionality" },
+{ value: "B", text: "ENFP 'Happy Puppy' → Loves Colorful Toys" },
+{ value: "C", text: "INFJ 'Philosophical Cat' → Prefers Quiet Corners" },
+{ value: "D", text: "ESTP 'Adventurer' → Needs Durable Materials" }
+]
+},
+{
+id: 6,
+question: "Where does your pet prefer to stay at home?",
+type: "single",
+options: [
+{ value: "A", text: "Sunny Windowsill" },
+{ value: "B", text: "Owner's Bed or Couch" },
+{ value: "C", text: "Quiet Corner" },
+{ value: "D", text: "Following Owner Around" }
+]
+},
+{
+id: 7,
+question: "How does your pet react to strangers?",
+type: "single",
+options: [
+{ value: "A", text: "Keeps Distance, Observes for a While" },
+{ value: "B", text: "Greets Warmly, Seeks Attention" },
+{ value: "C", text: "Hides, Avoids Contact" },
+{ value: "D", text: "Alert but Curious, Approaches Slowly" }
+]
+},
+{
+id: 8,
+question: "What color toys does your pet prefer?",
+type: "single",
+options: [
+{ value: "A", text: "Natural Colors (Brown, Green)" },
+{ value: "B", text: "Bright Colors (Red, Yellow)" },
+{ value: "C", text: "Soft Tones (Pink, Light Blue)" },
+{ value: "D", text: "Neutral Colors (Gray, Beige)" }
+]
+},
+{
+id: 9,
+question: "What toy materials does your pet like? (Multiple Choice)",
+type: "multiple",
+options: [
+{ value: "A", text: "Plush Fabric" },
+{ value: "B", text: "Natural Rubber" },
+{ value: "C", text: "Rope Weave" },
+{ value: "D", text: "Wooden Material" },
+{ value: "E", text: "Leather Material" }
+]
+},
+{
+id: 10,
+question: "What's your pet's usual sleeping position?",
+type: "single",
+options: [
+{ value: "A", text: "Curled Up in a Ball" },
+{ value: "B", text: "Belly Up, Paws in Air" },
+{ value: "C", text: "Stretched Out, Taking Space" },
+{ value: "D", text: "Next to Owner or Objects" }
+]
+},
+{
+id: 11,
+question: "What's your pet's activity level?",
+type: "single",
+options: [
+{ value: "A", text: "Lazy Type, Sleeps Most of the Time" },
+{ value: "B", text: "Energetic, Needs Lots of Exercise" },
+{ value: "C", text: "Brief Activity, Then Long Rest" },
+{ value: "D", text: "Moderate, Matches Owner's Pace" }
+]
+},
+{
+id: 12,
+question: "How sensitive is your pet to sounds?",
+type: "single",
+options: [
+{ value: "A", text: "Very Sensitive, Easily Startled" },
+{ value: "B", text: "Moderately Sensitive, Alert but Not Scared" },
+{ value: "C", text: "Barely Notices, Rarely Disturbed" },
+{ value: "D", text: "Selectively Attentive, Reacts to Specific Sounds" }
+]
+}
+];
+// 初始化变量
+let currentQuestion = 0;
+const answers = {};
+const totalQuestions = questions.length;
+// 获取DOM元素
+const testIntro = document.getElementById('testIntro');
+const testContainer = document.getElementById('testContainer');
+const testResult = document.getElementById('testResult');
+const questionContainer = document.getElementById('questionContainer');
+const progressBar = document.getElementById('progressBar');
+const currentQuestionNum = document.getElementById('currentQuestionNum');
+const totalQuestionsEl = document.getElementById('totalQuestions');
+const startTestBtn = document.getElementById('startTestBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const backBtn = document.getElementById('backBtn');
+// 设置总题目数
+totalQuestionsEl.textContent = totalQuestions;
+// 开始测试按钮点击事件
+startTestBtn.addEventListener('click', function() {
+testIntro.classList.add('hidden');
+testContainer.classList.remove('hidden');
+testContainer.classList.add('fade-in');
+showQuestion(0);
+});
+// 返回按钮点击事件
+backBtn.addEventListener('click', function() {
+if (testIntro.classList.contains('hidden') && testResult.classList.contains('hidden')) {
+if (currentQuestion === 0) {
+testContainer.classList.add('hidden');
+testIntro.classList.remove('hidden');
+testIntro.classList.add('fade-in');
+} else {
+currentQuestion--;
+showQuestion(currentQuestion);
+}
+} else if (!testResult.classList.contains('hidden')) {
+testResult.classList.add('hidden');
+testContainer.classList.remove('hidden');
+testContainer.classList.add('fade-in');
+showQuestion(questions.length - 1);
+} else {
+window.history.back();
+}
+});
+// 上一题按钮点击事件
+prevBtn.addEventListener('click', function() {
+if (currentQuestion > 0) {
+currentQuestion--;
+showQuestion(currentQuestion);
+}
+});
+// 下一题按钮点击事件
+nextBtn.addEventListener('click', function() {
+const currentQ = questions[currentQuestion];
+// 检查是否已回答
+if (currentQ.type === 'single') {
+const selected = document.querySelector(`input[name="q${currentQ.id}"]:checked`);
+if (!selected) {
+showToast('Please select an option');
+return;
+}
+answers[`q${currentQ.id}`] = selected.value;
+} else if (currentQ.type === 'multiple') {
+const selected = document.querySelectorAll(`input[name="q${currentQ.id}"]:checked`);
+if (selected.length === 0) {
+showToast('Please select at least one option');
+return;
+}
+answers[`q${currentQ.id}`] = Array.from(selected).map(s => s.value);
+}
+if (currentQuestion < totalQuestions - 1) {
+currentQuestion++;
+showQuestion(currentQuestion);
+} else {
+showResult();
+}
+});
+// 显示问题
+function showQuestion(index) {
+currentQuestion = index;
+const question = questions[index];
+// 更新进度
+const progress = ((index + 1) / totalQuestions) * 100;
+progressBar.style.width = `${progress}%`;
+currentQuestionNum.textContent = index + 1;
+// 更新按钮状态
+prevBtn.disabled = index === 0;
+prevBtn.classList.toggle('opacity-50', index === 0);
+nextBtn.textContent = index === totalQuestions - 1 ? 'Complete' : 'Next';
+// 创建问题HTML
+let optionsHtml = '';
+const inputType = question.type === 'single' ? 'radio' : 'checkbox';
+question.options.forEach(option => {
+const isChecked = answers[`q${question.id}`] ?
+(question.type === 'single' ?
+answers[`q${question.id}`] === option.value :
+answers[`q${question.id}`].includes(option.value)) :
+false;
+optionsHtml += `
+<label class="flex items-center p-3 rounded-lg bg-white mb-2 option-transition cursor-pointer ${isChecked ? 'bg-[#FDF6E3]' : ''}">
+<input type="${inputType}" name="q${question.id}" value="${option.value}" class="hidden" ${isChecked ? 'checked' : ''}>
+<span class="w-5 h-5 border-2 border-[#E4C8A3] ${question.type === 'single' ? 'rounded-full' : 'rounded'} mr-3 flex-shrink-0 flex items-center justify-center" style="${isChecked ? 'background-color: #C7A063;' : ''}">
+${isChecked ? (question.type === 'single' ? '' : '<i class="ri-check-line text-white text-xs"></i>') : ''}
+</span>
+<span class="text-sm text-[#71655C]">${option.text}</span>
+</label>
+`;
+});
+questionContainer.innerHTML = `
+<div class="bg-[#F7F2E7] rounded-lg p-4 card-shadow fade-in">
+<h3 class="text-[#9D7463] font-medium mb-4">${question.id}. ${question.question}</h3>
+<div class="space-y-2">
+${optionsHtml}
+</div>
+</div>
+`;
+// 添加选项点击事件
+document.querySelectorAll(`input[name="q${question.id}"]`).forEach(input => {
+input.addEventListener('change', function() {
+const span = this.nextElementSibling;
+const labels = this.closest('.space-y-2').querySelectorAll('label');
+if (question.type === 'single') {
+labels.forEach(label => {
+const radioSpan = label.querySelector('span:first-of-type');
+radioSpan.style.backgroundColor = 'transparent';
+label.classList.remove('bg-[#FDF6E3]');
+});
+span.style.backgroundColor = '#C7A063';
+this.closest('label').classList.add('bg-[#FDF6E3]');
+} else {
+if (this.checked) {
+span.style.backgroundColor = '#C7A063';
+span.innerHTML = '<i class="ri-check-line text-white text-xs"></i>';
+this.closest('label').classList.add('bg-[#FDF6E3]');
+} else {
+span.style.backgroundColor = 'transparent';
+span.innerHTML = '';
+this.closest('label').classList.remove('bg-[#FDF6E3]');
+}
+}
+});
+});
+}
+// 显示结果
+function showResult() {
+// 分析结果
+const petTypes = analyzeResults();
+// 构建结果HTML
+testResult.innerHTML = `
+<div class="bg-[#F7F2E7] rounded-lg p-4 card-shadow fade-in">
+<div class="flex justify-center mb-4 w-full">
+<img src="https://readdy.ai/api/search-image?query=cute%2520cartoon%2520pet%2520with%2520personality%2520traits%252C%2520happy%2520dog%2520and%2520cat%2520with%2520accessories%252C%2520pastel%2520colors%252C%2520celebration%2520confetti%252C%2520centered%2520composition%2520on%2520light%2520beige%2520background%252C%2520high%2520quality%252C%2520clean%2520design&width=300&height=200&seq=102&orientation=landscape" alt="测试结果" class="w-[clamp(280px,90vw,375px)] aspect-[3/2] object-cover rounded-md">
+</div>
+<h2 class="text-[#9D7463] text-lg font-medium mb-2">Test Complete!</h2>
+<p class="text-sm text-[#71655C] mb-4">Based on the test results, your pet's personality type is:</p>
+<div class="bg-white p-4 rounded-lg mb-4">
+<h3 class="text-[#C7A063] text-base font-medium mb-2">${petTypes.mainType.name}</h3>
+<p class="text-sm text-[#71655C] mb-3">${petTypes.mainType.description}</p>
+<div class="flex flex-wrap gap-2 mb-3">
+${petTypes.traits.map(trait => `
+<span class="bg-[#F3E9D8] text-[#9D7463] text-xs px-2 py-1 rounded-full">${trait}</span>
+`).join('')}
+</div>
+</div>
+<div class="space-y-3 mb-4">
+<h4 class="text-[#9D7463] font-medium">Recommended Product Styles:</h4>
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center bg-[#E4C8A3] rounded-full mr-2">
+<i class="ri-home-smile-fill text-[#9D7463]"></i>
+</div>
+<span class="text-sm text-[#71655C]">${petTypes.recommendations.home}</span>
+</div>
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center bg-[#E4C8A3] rounded-full mr-2">
+<i class="ri-gamepad-fill text-[#9D7463]"></i>
+</div>
+<span class="text-sm text-[#71655C]">${petTypes.recommendations.toys}</span>
+</div>
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center bg-[#E4C8A3] rounded-full mr-2">
+<i class="ri-restaurant-fill text-[#9D7463]"></i>
+</div>
+<span class="text-sm text-[#71655C]">${petTypes.recommendations.food}</span>
+</div>
+</div>
+<button id="viewProductsBtn" class="w-full py-3 text-white bg-primary rounded-button font-medium cursor-pointer mb-3">View Recommended Products</button>
+<button id="shareResultBtn" class="w-full py-3 text-[#9D7463] bg-white border border-[#E4C8A3] rounded-button font-medium cursor-pointer mb-3">Share Results</button>
+<a href="home.html" data-readdy="true">
+<button id="backHomeBtn" class="w-full py-3 text-[#9D7463] bg-white border border-[#E4C8A3] rounded-button font-medium cursor-pointer">Back to Home</button>
+</a>
+</div>
+`;
+// 显示结果页面
+testContainer.classList.add('hidden');
+testResult.classList.remove('hidden');
+// 添加按钮事件
+document.getElementById('viewProductsBtn').addEventListener('click', function() {
+// 跳转到推荐商品页面
+window.location.href = '#recommendedProducts';
+});
+document.getElementById('shareResultBtn').addEventListener('click', function() {
+showToast('Share feature coming soon');
+});
+}
+// 分析测试结果
+function analyzeResults() {
+// 简化的分析逻辑
+let typeA = 0, typeB = 0, typeC = 0, typeD = 0;
+// 计算各类型得分
+Object.entries(answers).forEach(([key, value]) => {
+if (Array.isArray(value)) {
+value.forEach(v => {
+if (v === 'A') typeA++;
+else if (v === 'B') typeB++;
+else if (v === 'C') typeC++;
+else if (v === 'D') typeD++;
+});
+} else {
+if (value === 'A') typeA++;
+else if (value === 'B') typeB++;
+else if (value === 'C') typeC++;
+else if (value === 'D') typeD++;
+}
+});
+// 确定主要类型
+const scores = [
+{ type: 'A', score: typeA },
+{ type: 'B', score: typeB },
+{ type: 'C', score: typeC },
+{ type: 'D', score: typeD }
+];
+scores.sort((a, b) => b.score - a.score);
+const mainType = scores[0].type;
+// 定义类型特征
+const typeInfo = {
+'A': {
+name: 'Quiet Observer',
+description: 'Your pet has a gentle personality, enjoys quiet environments, and maintains a cautious curiosity about their surroundings. They like having their own space but also enjoy quiet companionship with you.',
+traits: ['Patient', 'Independent', 'Observant', 'Quiet-loving'],
+recommendations: {
+home: 'Natural wooden style bed for comfort and security',
+toys: 'Simple but engaging puzzle toys with quiet design',
+food: 'Hypoallergenic grain-free food with consistent formula'
+}
+},
+'B': {
+name: 'Energetic Explorer',
+description: 'Your pet is full of energy and curiosity, always enthusiastic about new things. They love exploring their environment and interacting with people, bringing joy to the household.',
+traits: ['Curious', 'Lively', 'Social', 'Adventurous'],
+recommendations: {
+home: 'Multi-functional activity space with bright-colored bedding',
+toys: 'Interactive toys with variable play patterns',
+food: 'High-energy formula with diverse treat options'
+}
+},
+'C': {
+name: 'Elegant Thinker',
+description: 'Your pet is independent with their own opinions, preferring to live at their own pace. They might appear aloof but show their gentle side to those they trust.',
+traits: ['Independent', 'Selective', 'Opinionated', 'Sensitive'],
+recommendations: {
+home: 'Elevated rest areas with private spaces',
+toys: 'Sophisticated toys with premium quality',
+food: 'Selected ingredients with particular texture preferences'
+}
+},
+'D': {
+name: 'Loyal Companion',
+description: 'Your pet is loyal and friendly, centered around you, and loves companionship and interaction. They adapt well to various environments, making them ideal family companions.',
+traits: ['Loyal', 'Adaptable', 'Friendly', 'Dependent'],
+recommendations: {
+home: 'Comfortable bed near owner\'s activity area',
+toys: 'Interactive and durable chew toys',
+food: 'Balanced nutrition formula with training-friendly treats'
+}
+}
+};
+return {
+mainType: typeInfo[mainType],
+traits: typeInfo[mainType].traits,
+recommendations: typeInfo[mainType].recommendations
+};
+}
+// 显示提示信息
+function showToast(message) {
+const toast = document.createElement('div');
+toast.className = 'fixed top-16 left-1/2 transform -translate-x-1/2 bg-[rgba(0,0,0,0.7)] text-white px-4 py-2 rounded-lg text-sm z-50';
+toast.textContent = message;
+document.body.appendChild(toast);
+setTimeout(() => {
+toast.classList.add('opacity-0');
+toast.style.transition = 'opacity 0.3s ease';
+setTimeout(() => {
+document.body.removeChild(toast);
+}, 300);
+}, 2000);
+}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, scale=1.0, user-scalable=no">
+<title>Pet Product Design Platform</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#FDCD22',secondary:'#F8EDD2'},borderRadius:{'none':'0px','sm':'8px',DEFAULT:'12px','md':'16px','lg':'20px','xl':'24px','2xl':'28px','3xl':'32px','full':'9999px','button':'12px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  article {
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 16px;
+  }
+  
+  .image-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 75%; /* 改为4:3比例，更适合移动端 */
+  }
+  
+  .image-container img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .card-content {
+    padding: 1rem;
+  }
+  
+  .text-xl {
+    font-size: 1.125rem;
+    line-height: 1.4;
+  }
+  
+  .text-base {
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+  
+  .card-actions {
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  
+  .avatar-group img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .mb-4 {
+    margin-bottom: 0.75rem;
+  }
+  
+  .space-x-4 > * + * {
+    margin-left: 0.75rem;
+  }
+
+  /* 添加新的移动端优化样式 */
+  .product-info {
+    padding: 1rem;
+  }
+
+  .product-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .product-info p {
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .gallery-image {
+    max-height: 50vh;
+    object-fit: contain;
+  }
+
+  .modal-content {
+    width: 95%;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+
+  .upload-area {
+    height: 8rem;
+  }
+
+  /* 底部导航栏优化 */
+  nav.fixed.bottom-0 {
+    padding: 0.5rem 0;
+  }
+
+  nav.fixed.bottom-0 a {
+    padding: 0.25rem;
+  }
+
+  nav.fixed.bottom-0 i {
+    font-size: 1.25rem;
+  }
+
+  nav.fixed.bottom-0 span {
+    font-size: 0.75rem;
+  }
+}
+
+/* 针对超小屏幕的优化 */
+@media (max-width: 360px) {
+  article {
+    border-radius: 12px;
+  }
+  
+  .image-container {
+    padding-bottom: 66.67%;
+  }
+  
+  .card-content {
+    padding: 0.75rem;
+  }
+  
+  .text-xl {
+    font-size: 1rem;
+  }
+  
+  .text-base {
+    font-size: 0.75rem;
+  }
+
+  .product-info {
+    padding: 0.75rem;
+  }
+
+  .product-info h3 {
+    font-size: 1.125rem;
+  }
+
+  .product-info p {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: 95%;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  .upload-area {
+    height: 8rem;
+  }
+
+  article {
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .card-shadow {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media (min-width: 481px) {
+  .upload-area {
+    height: 10rem;
+  }
+}
+@media (hover: hover) {
+  .card-shadow:hover {
+    transform: translateY(-2px);
+  }
+}
+@media (hover: none) {
+  .card-shadow:active {
+    transform: scale(0.98);
+  }
+}
+body {
+width: 100%;
+max-width: 768px;
+min-width: 320px;
+margin: 0 auto;
+font-family: 'Inter', sans-serif;
+background-color: #FAFAFA;
+overflow-x: hidden;
+font-size: 16px;
+line-height: 1.6;
+}
+@keyframes heartBeat {
+0% { transform: scale(1); }
+50% { transform: scale(1.2); }
+100% { transform: scale(1); }
+}
+.heart-animation {
+animation: heartBeat 0.3s ease-in-out;
+}
+@keyframes fadeIn {
+from {
+opacity: 0;
+transform: translateY(20px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+.animate-fade-in {
+animation: fadeIn 0.5s ease-out forwards;
+}
+@keyframes shake {
+0%, 100% { transform: translateX(0); }
+25% { transform: translateX(-4px); }
+75% { transform: translateX(4px); }
+}
+.animate-shake {
+animation: shake 0.3s ease-in-out;
+}
+.card-shadow {
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+transition: all 0.3s ease;
+}
+.card-shadow:hover {
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+transform: translateY(-2px);
+}
+.notification {
+animation: slideDown 0.5s ease-in-out forwards;
+transform: translateY(-100%);
+}
+@keyframes slideDown {
+to { transform: translateY(0); }
+}
+.modal {
+background-color: rgba(0, 0, 0, 0.5);
+opacity: 0;
+visibility: hidden;
+transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal.active {
+opacity: 1;
+visibility: visible;
+}
+.modal-content {
+transform: scale(0.9);
+transition: transform 0.3s ease;
+}
+.modal.active .modal-content {
+transform: scale(1);
+}
+.upload-area {
+border: 2px dashed #E2E8F0;
+transition: all 0.3s ease;
+}
+.upload-area:hover {
+border-color: #FDCD22;
+background-color: rgba(253, 205, 34, 0.05);
+}
+.image-gallery {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: rgba(0, 0, 0, 0.9);
+z-index: 1000;
+display: none;
+overflow-y: auto;
+}
+.image-gallery.active {
+display: block;
+}
+.like-count.animate {
+transform: scale(1.2);
+}
+</style>
+</head>
+<body class="bg-white min-h-[762px]">
+<!-- 导航栏 -->
+<nav class="fixed top-0 w-full bg-white shadow-sm z-50">
+<div class="flex items-center justify-between px-4 py-3">
+<div class="flex items-center">
+<h1 class="text-2xl font-['Pacifico'] text-primary">
+<a href="home.html">
+<img src="https://static.readdy.ai/image/8a28112eba8f5b85c64fe8c774d362c1/9b13ae56b092507153833750c1a0bf2e.png" alt="DumCutie" class="h-8">
+</a>
+</h1>
+</div>
+<div class="flex items-center space-x-4">
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 cursor-pointer">
+<i class="ri-search-line text-gray-600"></i>
+</div>
+</div>
+</div>
+</nav>
+<!-- 主内容区 -->
+<main class="pt-16 md:pt-20 pb-24 px-4 md:px-6 w-full max-w-[1200px] mx-auto">
+<!-- 通知提示 -->
+<div id="notification" class="fixed top-0 left-0 right-0 bg-green-500 text-white py-3 px-4 text-center z-50 notification hidden">
+Operation completed!
+</div>
+<!-- 标题和添加按钮 -->
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-2xl font-semibold text-gray-800">Pet Product Design</h2>
+<button id="addProductBtn" class="bg-primary hover:bg-amber-500 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-md transition-all duration-300 cursor-pointer">
+<i class="ri-add-line ri-xl"></i>
+</button>
+</div>
+<!-- 分类标签 -->
+<div class="flex overflow-x-auto space-x-3 mb-8 pb-2 no-scrollbar">
+<button class="whitespace-nowrap px-5 py-2.5 bg-primary text-white rounded-full text-base flex-shrink-0">All</button>
+<button class="whitespace-nowrap px-5 py-2.5 bg-gray-100 text-gray-700 rounded-full text-base flex-shrink-0 hover:bg-gray-200">Pet Furniture</button>
+<button class="whitespace-nowrap px-5 py-2.5 bg-gray-100 text-gray-700 rounded-full text-base flex-shrink-0 hover:bg-gray-200">Feeder</button>
+<button class="whitespace-nowrap px-5 py-2.5 bg-gray-100 text-gray-700 rounded-full text-base flex-shrink-0 hover:bg-gray-200">Toys</button>
+<button class="whitespace-nowrap px-5 py-2.5 bg-gray-100 text-gray-700 rounded-full text-base flex-shrink-0 hover:bg-gray-200">Others</button>
+</div>
+<!-- 产品卡片网格 -->
+<div class="grid gap-4 md:gap-6 lg:gap-8">
+<!-- 产品卡片 1 -->
+<article class="bg-white rounded-xl shadow-sm card-shadow overflow-hidden flex flex-col h-full">
+<div class="relative image-container cursor-pointer gallery-trigger">
+<img src="https://readdy.ai/api/search-image?query=cute%2520ragdoll%2520cat%2520lying%2520in%2520sunlight%252C%2520soft%2520fur%252C%2520blue%2520eyes%252C%2520peaceful%2520expression%252C%2520high%2520quality%2520pet%2520photography&width=600&height=400&seq=1&orientation=landscape" alt="Ragdoll Cat" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+  <div class="flex items-center justify-end">
+    <span class="text-white text-base"><span class="follow-count">24</span> followers</span>
+  </div>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-grow card-content">
+<h3 class="text-xl font-medium text-gray-800 mb-2 line-clamp-2">Multi-functional Cat Resting Pavilion</h3>
+<p class="text-base text-gray-600 mb-4 line-clamp-3">An innovative design combining scratching post, resting area and viewing platform, made of eco-friendly materials, suitable for cats of all sizes.</p>
+<div class="flex items-center justify-between mb-4">
+<p class="text-primary font-semibold text-lg">AUD 299</p>
+<p class="text-base text-gray-500">2025-04-18</p>
+</div>
+<div class="flex items-center justify-end pt-4 border-t border-gray-100 mt-auto card-actions">
+<div class="flex items-center space-x-4">
+<div class="flex items-center cursor-pointer like-button" data-liked="false" data-count="42">
+<i class="ri-heart-line ri-xl mr-2 text-gray-400"></i>
+<span class="text-base text-gray-600 like-count">42</span>
+</div>
+<div class="flex items-center cursor-pointer comment-button">
+<i class="ri-message-3-line ri-xl mr-2 text-gray-400"></i>
+<span class="text-base text-gray-600">18</span>
+</div>
+<div class="flex items-center cursor-pointer collect-button" data-collected="false">
+<i class="ri-star-line ri-xl mr-2 text-gray-400"></i>
+<span class="text-base text-gray-600">Collect</span>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- 产品卡片 2 -->
+<article class="bg-white rounded-xl shadow-sm card-shadow overflow-hidden flex flex-col h-full">
+<div class="relative image-container cursor-pointer gallery-trigger">
+<img src="https://readdy.ai/api/search-image?query=golden%2520retriever%2520playing%2520in%2520park%252C%2520sunny%2520day%252C%2520happy%2520expression%252C%2520running%2520with%2520other%2520dogs%252C%2520high%2520quality%2520pet%2520photography&width=600&height=400&seq=2&orientation=landscape" alt="Golden Retriever Playing" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+  <div class="flex items-center justify-end">
+    <span class="text-white text-base"><span class="follow-count">16</span> followers</span>
+  </div>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-grow card-content">
+<h3 class="text-xl font-medium text-gray-800 mb-2 line-clamp-2">Smart Interactive Dog Trainer</h3>
+<p class="text-gray-600 text-sm mb-2">An innovative smart training device that integrates automatic feeding, voice commands, and interactive games to help dogs stay active and learn new skills.</p>
+<div class="flex items-center justify-between mb-4">
+<p class="text-primary font-semibold text-lg">AUD 299</p>
+<p class="text-gray-500 text-sm">2025-04-18</p>
+</div>
+<div class="flex items-center justify-end pt-4 border-t border-gray-100 mt-auto card-actions">
+<div class="flex items-center space-x-4">
+<div class="flex items-center cursor-pointer like-button" data-liked="false" data-count="36">
+<i class="ri-heart-line ri-xl mr-2 text-gray-400"></i>
+<span class="text-sm text-gray-600 like-count">36</span>
+</div>
+<div class="flex items-center cursor-pointer comment-button">
+<i class="ri-message-3-line ri-xl mr-2 text-gray-400"></i>
+<span class="text-sm text-gray-600">12</span>
+</div>
+<div class="flex items-center cursor-pointer collect-button" data-collected="false">
+<i class="ri-star-line ri-xl mr-2 text-gray-400"></i>
+<span class="text-base text-gray-600">Collect</span>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- 产品卡片 4 -->
+<article class="bg-white rounded-xl shadow-sm card-shadow overflow-hidden flex flex-col h-full">
+<div class="relative image-container cursor-pointer gallery-trigger">
+<img src="https://readdy.ai/api/search-image?query=modern%2520bookshelf%2520design%252C%2520modular%2520style%252C%2520white%2520and%2520wood%2520colors%252C%2520clean%2520background%252C%2520product%2520photography%252C%2520high%2520quality%252C%2520professional%2520lighting&width=600&height=400&seq=4&orientation=landscape" alt="Modular Bookshelf" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+  <div class="flex items-center justify-end">
+    <span class="text-white text-base"><span class="follow-count">19</span> followers</span>
+  </div>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-grow card-content">
+<h3 class="text-xl font-medium text-gray-800 mb-2 line-clamp-2">Modular Bookshelf</h3>
+<p class="text-base text-gray-600 mb-4 line-clamp-3">Modular bookshelf units with white and wood color combinations, adaptable to different space requirements.</p>
+<div class="flex items-center justify-between mb-4">
+<p class="text-primary font-semibold text-lg">AUD 329</p>
+<p class="text-base text-gray-500">2025-04-18</p>
+</div>
+<div class="flex items-center justify-end pt-4 border-t border-gray-100 mt-auto card-actions">
+<div class="flex items-center space-x-4">
+<div class="flex items-center cursor-pointer like-button" data-liked="false" data-count="29">
+<i class="ri-heart-line ri-xl mr-2 text-gray-400"></i>
+<span class="text-sm text-gray-600 like-count">29</span>
+</div>
+<div class="flex items-center cursor-pointer comment-button">
+<i class="ri-message-3-line ri-xl mr-2 text-gray-400"></i>
+<span class="text-sm text-gray-600">9</span>
+</div>
+<div class="flex items-center cursor-pointer collect-button" data-collected="false">
+<i class="ri-star-line ri-xl mr-2 text-gray-400"></i>
+<span class="text-base text-gray-600">Collect</span>
+</div>
+</div>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- 底部导航栏 -->
+<nav class="fixed bottom-0 w-full bg-white border-t border-gray-200 z-40">
+<div class="flex justify-around items-center py-3">
+<a href="home.html" class="flex flex-col items-center justify-center px-4 py-1">
+<div class="w-8 h-8 flex items-center justify-center text-primary">
+<i class="ri-home-5-fill ri-xl"></i>
+</div>
+<span class="text-base text-primary mt-1">Home</span>
+</a>
+<a href="#" class="flex flex-col items-center justify-center px-4 py-1">
+<div class="w-8 h-8 flex items-center justify-center text-gray-500">
+<i class="ri-compass-line ri-xl"></i>
+</div>
+<span class="text-base text-gray-500 mt-1">Discover</span>
+</a>
+<a href="#" class="flex flex-col items-center justify-center px-4 py-1">
+<div class="w-8 h-8 flex items-center justify-center text-gray-500">
+<i class="ri-message-2-line ri-xl"></i>
+</div>
+<span class="text-base text-gray-500 mt-1">Messages</span>
+</a>
+</div>
+</nav>
+<!-- 添加产品模态框 -->
+<div id="addProductModal" class="modal fixed inset-0 flex items-center justify-center z-50">
+<div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+<div class="modal-content bg-white rounded-lg w-[90%] max-w-[480px] mx-auto p-4 relative z-10">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-xl font-semibold text-gray-800">Add New Product</h3>
+<button id="closeModalBtn" class="text-gray-500 hover:text-gray-700 cursor-pointer">
+<i class="ri-close-line ri-lg"></i>
+</button>
+</div>
+<form id="addProductForm">
+<div class="mb-4">
+<label class="block text-base font-medium text-gray-700 mb-2">Product Image</label>
+<div id="uploadArea" class="upload-area h-40 flex flex-col items-center justify-center cursor-pointer rounded !rounded-button">
+<div id="uploadPlaceholder">
+<i class="ri-image-add-line ri-2x text-gray-400 mb-2"></i>
+<p class="text-base text-gray-500">Click or drag image here</p>
+</div>
+<div id="previewContainer" class="hidden w-full h-full">
+<img id="imagePreview" class="w-full h-full object-contain" src="" alt="Preview Image">
+</div>
+<input type="file" id="imageUpload" class="hidden" accept="image/*">
+</div>
+</div>
+<div class="mb-4">
+<label for="productName" class="block text-base font-medium text-gray-700 mb-2">Product Name</label>
+<input type="text" id="productName" class="w-full p-3 border border-gray-200 rounded !rounded-button text-base focus:outline-none focus:border-primary" placeholder="Enter product name">
+</div>
+<div class="mb-4">
+<label for="productDescription" class="block text-base font-medium text-gray-700 mb-2">Product Description</label>
+<textarea id="productDescription" rows="3" class="w-full p-3 border border-gray-200 rounded !rounded-button text-base focus:outline-none focus:border-primary" placeholder="Enter product description"></textarea>
+</div>
+<div class="mb-4">
+<label for="productCategory" class="block text-base font-medium text-gray-700 mb-2">Product Category</label>
+<div class="relative">
+<select id="productCategory" class="w-full p-2 border border-gray-200 rounded !rounded-button text-sm focus:outline-none focus:border-primary appearance-none bg-white pr-8">
+<option value="">Select Category</option>
+<option value="furniture">Pet Furniture</option>
+<option value="feeder">Feeder</option>
+<option value="toy">Toys</option>
+<option value="other">Others</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</div>
+</div>
+</div>
+<div class="mb-6">
+<label for="productPrice" class="block text-base font-medium text-gray-700 mb-2">Product Price</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">AUD</span>
+<input type="text" id="productPrice" class="w-full p-2 pl-12 border border-gray-200 rounded !rounded-button text-base focus:outline-none focus:border-primary" placeholder="Enter price">
+</div>
+</div>
+<div class="flex justify-end space-x-3">
+<button type="button" id="cancelBtn" class="px-4 py-2 border border-gray-300 rounded !rounded-button text-base text-gray-700 hover:bg-gray-50 cursor-pointer">Cancel</button>
+<button type="submit" class="px-4 py-2 bg-primary hover:bg-amber-500 text-white rounded !rounded-button text-base transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center cursor-pointer">
+<i class="ri-check-line mr-1"></i>
+Confirm Add
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- 图片预览画廊 -->
+<div class="image-gallery">
+<div class="w-full max-w-[768px] mx-auto px-4 py-6">
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-3xl font-semibold text-white">Product Details</h2>
+<button class="close-gallery text-white hover:text-gray-300 cursor-pointer">
+<i class="ri-close-line ri-2x"></i>
+</button>
+</div>
+<div class="relative mb-4">
+<img class="gallery-image w-full h-auto rounded-lg" src="" alt="Product Image">
+</div>
+<div class="product-info bg-white/5 backdrop-blur-sm p-4 rounded-lg mb-4">
+<h3 class="text-2xl font-medium text-white mb-2">${productName}</h3>
+<p class="text-base text-gray-300 mb-4">${productDescription}</p>
+<div class="flex items-center justify-between py-4 border-y border-white/10">
+<div class="flex items-center gap-2">
+<p class="text-lg font-semibold text-primary">AUD ${productPrice}</p>
+</div>
+</div>
+<div class="flex space-x-2 mt-4">
+<button class="gallery-like-btn h-9 px-4 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-all duration-300 flex items-center gap-1 cursor-pointer">
+<i class="ri-heart-line text-white"></i>
+<span class="text-base text-white gallery-like-count">0</span>
+</button>
+<button class="gallery-follow-btn h-9 px-4 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-all duration-300 flex items-center gap-1 cursor-pointer">
+<i class="ri-user-follow-line text-white"></i>
+<span class="text-sm text-white">Follow Content</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // IndexedDB 数据库名称和版本
+  const DB_NAME = 'petProductsDB';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'products';
+  const IMAGE_STORE_NAME = 'images';
+  
+  let db;
+  let productsData = {
+    products: [],
+    likes: {},
+    collections: {},
+    followers: {}
+  };
+
+  // 初始化 IndexedDB
+  function initDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      
+      request.onerror = function(event) {
+        console.error('Database error:', event.target.error);
+        reject(event.target.error);
+      };
+
+      request.onsuccess = function(event) {
+        db = event.target.result;
+        resolve(db);
+      };
+
+      request.onupgradeneeded = function(event) {
+        const db = event.target.result;
+        
+        // 创建产品存储
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          const productStore = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+          productStore.createIndex('date', 'date', { unique: false });
+        }
+        
+        // 创建图片存储
+        if (!db.objectStoreNames.contains(IMAGE_STORE_NAME)) {
+          db.createObjectStore(IMAGE_STORE_NAME, { keyPath: 'id' });
+        }
+      };
+    });
+  }
+
+  // 保存图片到 IndexedDB
+  function saveImageToDB(imageId, imageData) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([IMAGE_STORE_NAME], 'readwrite');
+      const store = transaction.objectStore(IMAGE_STORE_NAME);
+      const request = store.put({ id: imageId, data: imageData });
+
+      request.onsuccess = () => resolve();
+      request.onerror = (event) => reject(event.target.error);
+    });
+  }
+
+  // 从 IndexedDB 获取图片
+  function getImageFromDB(imageId) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([IMAGE_STORE_NAME], 'readonly');
+      const store = transaction.objectStore(IMAGE_STORE_NAME);
+      const request = store.get(imageId);
+
+      request.onsuccess = () => resolve(request.result ? request.result.data : null);
+      request.onerror = (event) => reject(event.target.error);
+    });
+  }
+
+  // 保存产品数据到 IndexedDB
+  function saveProductToDB(product) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([STORE_NAME], 'readwrite');
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.put(product);
+
+      request.onsuccess = () => resolve();
+      request.onerror = (event) => reject(event.target.error);
+    });
+  }
+
+  // 从 IndexedDB 获取所有产品
+  function getAllProductsFromDB() {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([STORE_NAME], 'readonly');
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.getAll();
+
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = (event) => reject(event.target.error);
+    });
+  }
+
+  // 初始化应用
+  async function initApp() {
+    try {
+      await initDB();
+      const products = await getAllProductsFromDB();
+      productsData.products = products;
+      // 从 localStorage 恢复点赞、收藏和关注数据
+      const storageData = JSON.parse(localStorage.getItem('pet_products_data')) || { 
+        likes: {}, 
+        collections: {}, 
+        followers: {} 
+      };
+      productsData.likes = storageData.likes || {};
+      productsData.collections = storageData.collections || {};
+      productsData.followers = storageData.followers || {};
+      await restoreData();
+    } catch (error) {
+      console.error('初始化失败:', error);
+      showNotification('初始化失败，请刷新页面重试', 'error');
+    }
+  }
+
+  // 保存数据到 localStorage
+  function saveData() {
+    localStorage.setItem('pet_products_data', JSON.stringify({
+      likes: productsData.likes,
+      collections: productsData.collections,
+      followers: productsData.followers
+    }));
+  }
+
+  // 添加产品表单提交
+  const addProductForm = document.getElementById('addProductForm');
+  addProductForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const productName = document.getElementById('productName').value;
+    const productDescription = document.getElementById('productDescription').value;
+    const productCategory = document.getElementById('productCategory').value;
+    const productPrice = document.getElementById('productPrice').value;
+    const imageFile = document.getElementById('imageUpload').files[0];
+    
+    if (!imageFile) {
+      showNotification('请上传产品图片', 'error');
+      return;
+    }
+    
+    try {
+      // 读取图片为 base64
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const imageData = e.target.result;
+        const productId = Date.now().toString();
+        
+        // 保存图片到 IndexedDB
+        await saveImageToDB(productId, imageData);
+        
+        // 创建新产品数据
+        const newProduct = {
+          id: productId,
+          name: productName,
+          description: productDescription,
+          category: productCategory,
+          price: productPrice,
+          date: new Date().toISOString(),
+          comments: 0,
+          imageId: productId
+        };
+        
+        // 保存产品数据到 IndexedDB
+        await saveProductToDB(newProduct);
+        
+        // 更新本地数据
+        productsData.products.push(newProduct);
+        
+        // 重新渲染产品列表
+        await restoreData();
+        
+        // 关闭模态框
+        closeModal();
+        
+        // 重置表单
+        addProductForm.reset();
+        document.getElementById('previewContainer').classList.add('hidden');
+        document.getElementById('uploadPlaceholder').classList.remove('hidden');
+        
+        showNotification('产品添加成功');
+      };
+      reader.readAsDataURL(imageFile);
+    } catch (error) {
+      console.error('添加产品失败:', error);
+      showNotification('添加产品失败，请重试', 'error');
+    }
+  });
+
+  // 修改恢复数据函数
+  async function restoreData() {
+    try {
+      const productGrid = document.querySelector('.grid');
+      productGrid.innerHTML = '';
+
+      // 获取所有产品数据
+      const products = await getAllProductsFromDB();
+      productsData.products = products;
+
+      // 按照时间倒序排序产品
+      const sortedProducts = [...productsData.products].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+
+      for (const product of sortedProducts) {
+        try {
+          const imageData = await getImageFromDB(product.imageId);
+          if (!imageData) {
+            console.warn(`找不到产品 ${product.id} 的图片`);
+            continue;
+          }
+
+          const productElement = document.createElement('article');
+          productElement.className = 'bg-white rounded-xl shadow-sm card-shadow overflow-hidden flex flex-col h-full';
+          productElement.setAttribute('data-id', product.id);
+          
+          const likeData = productsData.likes[product.id] || { count: 0, isLiked: false };
+          const isLiked = likeData.isLiked;
+          const likeCount = likeData.count;
+          const followerCount = productsData.followers[product.id] || 0;
+          
+          productElement.innerHTML = `
+            <div class="relative image-container cursor-pointer gallery-trigger">
+              <img src="${imageData}" alt="${product.name}" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+                <div class="flex items-center justify-end">
+                  <span class="text-white text-base"><span class="follow-count">${followerCount}</span> followers</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-4 flex flex-col flex-grow card-content">
+              <h3 class="text-xl font-medium text-gray-800 mb-2 line-clamp-2">${product.name}</h3>
+              <p class="text-base text-gray-600 mb-4 line-clamp-3">${product.description}</p>
+              <div class="flex items-center justify-between mb-4">
+                <p class="text-primary font-semibold text-lg">AUD ${product.price}</p>
+                <p class="text-base text-gray-500">${product.date.split('T')[0]}</p>
+              </div>
+              <div class="flex items-center justify-end pt-4 border-t border-gray-100 mt-auto card-actions">
+                <div class="flex items-center space-x-4">
+                  <div class="flex items-center cursor-pointer like-button" data-liked="${isLiked}" data-count="${likeCount}">
+                    <i class="ri-heart-${isLiked ? 'fill' : 'line'} ri-xl mr-2 ${isLiked ? 'text-primary' : 'text-gray-400'}"></i>
+                    <span class="text-base text-gray-600 like-count">${likeCount} likes</span>
+                  </div>
+                  <div class="flex items-center cursor-pointer comment-button">
+                    <i class="ri-message-3-line ri-xl mr-2 text-gray-400"></i>
+                    <span class="text-base text-gray-600">${product.comments}</span>
+                  </div>
+                  <div class="flex items-center cursor-pointer collect-button" data-collected="${productsData.collections[product.id] || 'false'}">
+                    <i class="ri-star-${productsData.collections[product.id] ? 'fill' : 'line'} ri-xl mr-2 ${productsData.collections[product.id] ? 'text-primary' : 'text-gray-400'}"></i>
+                    <span class="text-base text-gray-600">${productsData.collections[product.id] ? 'Collected' : 'Collect'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+
+          // 添加点赞事件监听
+          const likeButton = productElement.querySelector('.like-button');
+          likeButton.addEventListener('click', function() {
+            const countSpan = this.querySelector('span');
+            const icon = this.querySelector('i');
+            const productId = this.closest('article').getAttribute('data-id');
+            let count = parseInt(this.getAttribute('data-count'));
+
+            count++;
+            this.setAttribute('data-liked', 'true');
+            icon.classList.remove('ri-heart-line', 'text-gray-400');
+            icon.classList.add('ri-heart-fill', 'text-primary', 'heart-animation');
+            productsData.likes[productId] = { count, isLiked: true };
+
+            this.setAttribute('data-count', count);
+            countSpan.textContent = `${count} likes`;
+            countSpan.classList.add('animate');
+            setTimeout(() => {
+              icon.classList.remove('heart-animation');
+              countSpan.classList.remove('animate');
+            }, 300);
+            saveData();
+          });
+
+          // 添加收藏事件监听
+          const collectButton = productElement.querySelector('.collect-button');
+          collectButton.addEventListener('click', function() {
+            const isCollected = this.getAttribute('data-collected') === 'true';
+            const icon = this.querySelector('i');
+            const text = this.querySelector('span');
+            const productId = this.closest('article').getAttribute('data-id');
+
+            if (!isCollected) {
+              this.setAttribute('data-collected', 'true');
+              icon.classList.remove('ri-star-line', 'text-gray-400');
+              icon.classList.add('ri-star-fill', 'text-primary', 'heart-animation');
+              text.textContent = 'Collected';
+              productsData.collections[productId] = true;
+              showNotification('收藏成功!');
+            } else {
+              this.setAttribute('data-collected', 'false');
+              icon.classList.remove('ri-star-fill', 'text-primary');
+              icon.classList.add('ri-star-line', 'text-gray-400');
+              text.textContent = 'Collect';
+              delete productsData.collections[productId];
+              showNotification('取消收藏');
+            }
+            saveData();
+          });
+
+          // 添加画廊预览功能
+          const galleryTrigger = productElement.querySelector('.gallery-trigger');
+          galleryTrigger.addEventListener('click', function() {
+            openGallery(this);
+          });
+
+          productGrid.appendChild(productElement);
+        } catch (error) {
+          console.error(`恢复产品 ${product.id} 失败:`, error);
+        }
+      }
+    } catch (error) {
+      console.error('恢复数据失败:', error);
+      showNotification('恢复数据失败，请刷新页面重试', 'error');
+    }
+  }
+
+  // 初始化应用
+  initApp();
+
+  // 添加产品模态框
+  const addProductBtn = document.getElementById('addProductBtn');
+  const addProductModal = document.getElementById('addProductModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  addProductBtn.addEventListener('click', function() {
+    addProductModal.classList.add('active');
+  });
+  function closeModal() {
+    addProductModal.classList.remove('active');
+  }
+  closeModalBtn.addEventListener('click', closeModal);
+  cancelBtn.addEventListener('click', closeModal);
+  // 点击模态框外部关闭
+  addProductModal.addEventListener('click', function(e) {
+    if (e.target === addProductModal) {
+      closeModal();
+    }
+  });
+  // 图片上传预览
+  const uploadArea = document.getElementById('uploadArea');
+  const imageUpload = document.getElementById('imageUpload');
+  const previewContainer = document.getElementById('previewContainer');
+  const imagePreview = document.getElementById('imagePreview');
+  const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+  uploadArea.addEventListener('click', function() {
+    imageUpload.click();
+  });
+  uploadArea.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    this.classList.add('border-primary', 'bg-primary', 'bg-opacity-5');
+  });
+  uploadArea.addEventListener('dragleave', function() {
+    this.classList.remove('border-primary', 'bg-primary', 'bg-opacity-5');
+  });
+  uploadArea.addEventListener('drop', function(e) {
+    e.preventDefault();
+    this.classList.remove('border-primary', 'bg-primary', 'bg-opacity-5');
+    if (e.dataTransfer.files.length) {
+      imageUpload.files = e.dataTransfer.files;
+      displayPreview(e.dataTransfer.files[0]);
+    }
+  });
+  imageUpload.addEventListener('change', function() {
+    if (this.files.length) {
+      displayPreview(this.files[0]);
+    }
+  });
+  function displayPreview(file) {
+    if (!file.type.match('image.*')) {
+      showNotification('Please upload an image file!', 'error');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      imagePreview.src = e.target.result;
+      uploadPlaceholder.classList.add('hidden');
+      previewContainer.classList.remove('hidden');
+    }
+    reader.readAsDataURL(file);
+  }
+  // 通知提示
+  function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.classList.remove('hidden', 'bg-green-500', 'bg-red-500');
+    if (type === 'success') {
+      notification.classList.add('bg-green-500');
+    } else {
+      notification.classList.add('bg-red-500');
+    }
+    notification.classList.add('notification');
+    setTimeout(() => {
+      notification.classList.add('hidden');
+    }, 3000);
+  }
+  // 画廊功能
+  const galleryTriggers = document.querySelectorAll('.gallery-trigger');
+  const imageGallery = document.querySelector('.image-gallery');
+  const closeGallery = document.querySelector('.close-gallery');
+  function openGallery(trigger) {
+    const card = trigger.closest('article');
+    document.querySelectorAll('article').forEach(c => c.classList.remove('current-card'));
+    card.classList.add('current-card');
+    const productImage = trigger.querySelector('img').src;
+    const productTitle = card.querySelector('h3').textContent;
+    const productDesc = card.querySelector('p').textContent;
+    const productPrice = card.querySelector('.text-primary').textContent;
+    const productId = card.getAttribute('data-id');
+    
+    imageGallery.querySelector('.gallery-image').src = productImage;
+    imageGallery.querySelector('.product-info h3').textContent = productTitle;
+    imageGallery.querySelector('.product-info > p').textContent = productDesc;
+    imageGallery.querySelector('.product-info .text-primary').textContent = productPrice;
+    
+    // 设置点赞数
+    const likeData = productsData.likes[productId] || { count: 0, isLiked: false };
+    const likeCount = likeData.count;
+    const galleryLikeCount = imageGallery.querySelector('.gallery-like-count');
+    galleryLikeCount.textContent = likeCount;
+    
+    // 设置点赞状态
+    const galleryLikeBtn = imageGallery.querySelector('.gallery-like-btn');
+    const galleryLikeIcon = galleryLikeBtn.querySelector('i');
+    galleryLikeIcon.classList.remove('ri-heart-line');
+    galleryLikeIcon.classList.add('ri-heart-fill', 'text-primary');
+    galleryLikeBtn.classList.add('bg-white/30');
+    
+    imageGallery.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  galleryTriggers.forEach(trigger => {
+    trigger.addEventListener('click', function() {
+      openGallery(this);
+    });
+  });
+  closeGallery.addEventListener('click', function() {
+    imageGallery.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+  imageGallery.addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+  // 画廊中的点赞按钮
+  const galleryLikeBtn = document.querySelector('.gallery-like-btn');
+  galleryLikeBtn.addEventListener('click', function() {
+    const currentCard = document.querySelector('.current-card');
+    if (!currentCard) return;
+    const cardLikeBtn = currentCard.querySelector('.like-button');
+    const cardLikeCount = cardLikeBtn.querySelector('.like-count');
+    const currentCount = parseInt(document.querySelector('.gallery-like-count').textContent);
+    const newCount = currentCount + 1;
+    const productId = currentCard.getAttribute('data-id');
+    
+    // 更新画廊点赞状态
+    const icon = this.querySelector('i');
+    icon.classList.remove('ri-heart-line');
+    icon.classList.add('ri-heart-fill', 'text-primary');
+    this.classList.add('bg-white/30');
+    document.querySelector('.gallery-like-count').textContent = newCount;
+    
+    // 同步更新卡片中的点赞状态
+    cardLikeBtn.setAttribute('data-liked', 'true');
+    cardLikeBtn.setAttribute('data-count', newCount);
+    cardLikeCount.textContent = `${newCount} likes`;
+    const cardIcon = cardLikeBtn.querySelector('i');
+    cardIcon.classList.remove('ri-heart-line', 'text-gray-400');
+    cardIcon.classList.add('ri-heart-fill', 'text-primary');
+    productsData.likes[productId] = { count: newCount, isLiked: true };
+    
+    // 保存点赞数据
+    saveData();
+  });
+  // 画廊中的关注按钮
+  const galleryFollowBtn = document.querySelector('.gallery-follow-btn');
+  galleryFollowBtn.addEventListener('click', function() {
+    const currentCard = document.querySelector('.current-card');
+    if (!currentCard) return;
+    const followCount = currentCard.querySelector('.follow-count');
+    const isFollowed = this.classList.contains('bg-white/30');
+    const currentCount = parseInt(followCount.textContent);
+    const newCount = isFollowed ? currentCount - 1 : currentCount + 1;
+    const productId = currentCard.getAttribute('data-id');
+    
+    // 更新关注状态
+    const icon = this.querySelector('i');
+    const text = this.querySelector('span');
+    if (isFollowed) {
+      icon.classList.remove('ri-user-unfollow-line');
+      icon.classList.add('ri-user-follow-line');
+      this.classList.remove('bg-white/30');
+      text.textContent = 'Follow Content';
+      showNotification('取消关注');
+    } else {
+      icon.classList.add('ri-user-unfollow-line');
+      icon.classList.remove('ri-user-follow-line');
+      this.classList.add('bg-white/30');
+      text.textContent = 'Unfollow';
+      showNotification('关注成功');
+    }
+    
+    // 更新卡片中的关注数
+    followCount.textContent = newCount;
+    followCount.classList.add('animate');
+    setTimeout(() => followCount.classList.remove('animate'), 300);
+    
+    // 保存关注数据
+    productsData.followers[productId] = newCount;
+    saveData();
+  });
+});
+</script>
+<script src="scripts/product-interaction.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+{
+  "constants": {
+    "imageBaseUrl": "https://readdy.ai/api/search-image?query=",
+    "avatarBaseUrl": "https://readdy.ai/api/search-image?query=professional%2520headshot%2520of%2520a%2520",
+    "imageParams": "&width=600&height=400&orientation=landscape",
+    "avatarParams": "&width=48&height=48&orientation=squarish"
+  },
+  "products": [
+    {
+      "id": "1",
+      "name": "Multi-functional Cat Resting Pavilion",
+      "description": "An innovative design combining scratching post, resting area and viewing platform, made of eco-friendly materials, suitable for cats of all sizes.",
+      "price": 299.00,
+      "currency": "AUD",
+      "image": {
+        "query": "cute%2520ragdoll%2520cat%2520lying%2520in%2520sunlight%252C%2520soft%2520fur%252C%2520blue%2520eyes%252C%2520peaceful%2520expression%252C%2520high%2520quality%2520pet%2520photography",
+        "seq": 1
+      },
+      "category": "Pet Furniture",
+      "releaseDate": "2025-04-18T10:30:00Z",
+      "stats": {
+        "likes": 42,
+        "comments": 18,
+        "followers": 24
+      },
+      "followerAvatars": [
+        {
+          "query": "young%2520asian%2520person%252C%2520minimalist%2520style",
+          "seq": 101
+        },
+        {
+          "query": "middle%2520aged%2520asian%2520person",
+          "seq": 102
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Smart Interactive Dog Trainer",
+      "description": "An innovative smart training device that integrates automatic feeding, voice commands, and interactive games to help dogs stay active and learn new skills.",
+      "price": 299.00,
+      "currency": "AUD",
+      "image": {
+        "query": "golden%2520retriever%2520playing%2520in%2520park%252C%2520sunny%2520day%252C%2520happy%2520expression%252C%2520running%2520with%2520other%2520dogs%252C%2520high%2520quality%2520pet%2520photography",
+        "seq": 2
+      },
+      "category": "Smart Devices",
+      "releaseDate": "2025-04-18T11:15:00Z",
+      "stats": {
+        "likes": 36,
+        "comments": 12,
+        "followers": 16
+      },
+      "followerAvatars": [
+        {
+          "query": "young%2520asian%2520woman",
+          "seq": 104
+        },
+        {
+          "query": "young%2520asian%2520man",
+          "seq": 105
+        }
+      ]
+    }
+  ],
+  "categories": [
+    "All",
+    "Pet Furniture",
+    "Feeder",
+    "Toys",
+    "Others"
+  ],
+  "lastUpdated": "2024-03-20T10:00:00Z"
+} 

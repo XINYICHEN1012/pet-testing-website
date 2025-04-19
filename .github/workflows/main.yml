@@ -1,0 +1,73 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    env:
+      NODE_VERSION: '18'
+      NPM_VERSION: '9'
+      PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+      REPO_OWNER: 'XINYICHEN1012'
+      REPO_NAME: 'pet-testing-website'
+      NETLIFY_SITE_ID: 'e0d6d799-d50a-401e-8993-c75b03c36907'
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        token: ${{ env.PAT_TOKEN }}
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          **/node_modules
+          ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies
+      run: |
+        npm install -g npm@${{ env.NPM_VERSION }}
+        npm ci
+      
+    - name: Run linting
+      run: |
+        npm run lint || echo "Linting failed but continuing..."
+
+    - name: Build project
+      run: npm run build
+      env:
+        CI: true
+
+    - name: Validate HTML
+      run: |
+        npm install -g html-validator-cli
+        for file in *.html; do
+          if [ -f "$file" ]; then
+            echo "Validating $file..."
+            html-validator --file "$file" --format json || echo "Validation failed for $file but continuing..."
+          fi
+        done
+
+    - name: Deploy to Netlify
+      if: success() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+      run: |
+        npm install netlify-cli -g
+        netlify deploy --prod --dir=dist --auth ${{ env.NETLIFY_AUTH_TOKEN }} --site ${{ env.NETLIFY_SITE_ID }} --message="Deploy from GitHub Actions" 

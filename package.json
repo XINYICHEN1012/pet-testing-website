@@ -1,0 +1,29 @@
+{
+  "name": "pet-testing-website",
+  "version": "1.0.0",
+  "description": "A website for pet personality testing",
+  "scripts": {
+    "start": "serve .",
+    "dev": "serve . --listen 3000",
+    "prebuild": "rimraf dist",
+    "build": "mkdir -p dist && cp -r *.html scripts data images styles dist/ || true",
+    "serve": "serve dist",
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix",
+    "validate": "for %f in (*.html) do html-validator --file \"%f\" --verbose",
+    "validate:unix": "for file in *.html; do html-validator --file \"$file\" --verbose; done",
+    "clean": "rimraf dist node_modules"
+  },
+  "dependencies": {
+    "serve": "^14.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "html-validator-cli": "^7.0.1",
+    "rimraf": "^5.0.1"
+  },
+  "engines": {
+    "node": ">=18",
+    "npm": ">=9"
+  }
+}
