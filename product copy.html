@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>设计师产品展示</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#FDCD22',secondary:'#F8EDD2',accent:'#FF6B6B',neutral:'#F5F7FA',success:'#4CAF50',info:'#2196F3'},borderRadius:{'none':'0px','sm':'8px',DEFAULT:'12px','md':'16px','lg':'20px','xl':'24px','2xl':'28px','3xl':'32px','full':'9999px','button':'12px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+@media (min-width: 375px) {
+body {
+width: 375px;
+margin: 0 auto;
+}
+}
+@media (max-width: 374px) {
+body {
+width: 100%;
+min-width: 320px;
+}
+}
+@keyframes shake {
+0%, 100% { transform: translateX(0); }
+25% { transform: translateX(-4px); }
+75% { transform: translateX(4px); }
+}
+.animate-shake {
+animation: shake 0.3s ease-in-out;
+}
+body {
+font-family: 'Inter', sans-serif;
+background-color: #FAFAFA;
+min-width: 320px;
+max-width: 100%;
+margin: 0 auto;
+overflow-x: hidden;
+}
+@media (min-width: 375px) {
+.grid {
+grid-template-columns: repeat(1, 1fr);
+gap: 1rem;
+}
+}
+@media (min-width: 640px) {
+.grid {
+grid-template-columns: repeat(2, 1fr);
+gap: 1.5rem;
+}
+}
+@media (min-width: 768px) {
+.grid {
+grid-template-columns: repeat(2, 1fr);
+gap: 2rem;
+}
+}
+@media (min-width: 1024px) {
+.grid {
+grid-template-columns: repeat(3, 1fr);
+gap: 2rem;
+}
+}
+@media (min-width: 1280px) {
+.grid {
+grid-template-columns: repeat(3, 1fr);
+gap: 2.5rem;
+}
+}
+@media (max-width: 640px) {
+.gallery-content {
+padding: 0.5rem;
+}
+.product-info {
+padding: 1rem;
+}
+.question-list {
+margin-top: 0.5rem;
+}
+}
+@media (min-width: 641px) {
+.gallery-content {
+padding: 2rem;
+max-width: 90%;
+}
+}
+@media (hover: hover) {
+.card-shadow:hover {
+transform: translateY(-4px);
+}
+}
+.animate-bounce {
+animation: bounce 0.3s ease-in-out;
+}
+@keyframes bounce {
+0%, 100% { transform: translateY(0); }
+50% { transform: translateY(-3px); }
+}
+.image-gallery {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: rgba(0, 0, 0, 0.9);
+z-index: 1000;
+display: none;
+overflow-y: auto;
+}
+.image-gallery.active {
+display: block;
+}
+.gallery-content {
+max-width: 800px;
+margin: 2rem auto;
+padding: 1rem;
+color: white;
+}
+.gallery-image {
+width: 100%;
+height: auto;
+border-radius: 12px;
+margin-bottom: 1rem;
+}
+.question-list {
+background: rgba(255, 255, 255, 0.1);
+border-radius: 12px;
+padding: 1rem;
+margin-top: 1rem;
+}
+.avatar-group {
+display: flex;
+margin-left: -0.5rem;
+}
+.avatar-group .avatar {
+width: 24px;
+height: 24px;
+border-radius: 50%;
+border: 2px solid white;
+margin-left: -0.5rem;
+}
+.like-count {
+transition: all 0.3s ease;
+}
+.like-count.animate {
+transform: scale(1.2);
+}
+@keyframes fadeIn {
+from {
+opacity: 0;
+transform: translateY(20px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+.animate-fade-in {
+animation: fadeIn 0.5s ease-out forwards;
+}
+.card-shadow {
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+transition: all 0.3s ease;
+}
+.card-shadow:hover {
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+transform: translateY(-2px);
+}
+.heart-animation {
+animation: heartBeat 0.3s ease-in-out;
+}
+@keyframes heartBeat {
+0% { transform: scale(1); }
+50% { transform: scale(1.2); }
+100% { transform: scale(1); }
+}
+.notification {
+animation: slideDown 0.5s ease-in-out forwards;
+transform: translateY(-100%);
+}
+@keyframes slideDown {
+to { transform: translateY(0); }
+}
+.modal {
+background-color: rgba(0, 0, 0, 0.5);
+opacity: 0;
+visibility: hidden;
+transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal.active {
+opacity: 1;
+visibility: visible;
+}
+.modal-content {
+transform: scale(0.9);
+transition: transform 0.3s ease;
+width: 90%;
+max-width: 500px;
+margin: 0 auto;
+}
+@media (max-width: 640px) {
+.modal-content {
+width: 95%;
+padding: 1rem;
+}
+}
+.modal.active .modal-content {
+transform: scale(1);
+}
+.upload-area {
+border: 2px dashed #E2E8F0;
+transition: all 0.3s ease;
+}
+.upload-area:hover {
+border-color: #FDCD22;
+background-color: rgba(253, 205, 34, 0.05);
+}
+.question-form {
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.3s ease;
+}
+.question-form.active {
+max-height: 200px;
+}
+</style>
+</head>
+<body class="bg-white w-[375px] min-h-[762px] mx-auto overflow-x-hidden">
+<!-- 导航栏 -->
+<nav class="fixed top-0 w-full bg-white shadow-sm z-50">
+<div class="flex items-center justify-between px-4 py-3">
+<div class="flex items-center">
+<img src="https://static.readdy.ai/image/8a28112eba8f5b85c64fe8c774d362c1/9b13ae56b092507153833750c1a0bf2e.png" alt="Dumcutie" class="h-8">
+</div>
+<div class="flex items-center space-x-4">
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 cursor-pointer">
+<i class="ri-search-line text-gray-600"></i>
+</div>
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 cursor-pointer">
+<i class="ri-notification-3-line text-gray-600"></i>
+</div>
+<div class="relative">
+<div id="userAvatar" class="w-8 h-8 flex items-center justify-center rounded-full overflow-hidden cursor-pointer">
+<img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20asian%20woman%2C%20minimalist%20style%2C%20neutral%20expression%2C%20high%20quality&width=80&height=80&seq=123&orientation=squarish" alt="用户头像" class="w-full h-full object-cover">
+</div>
+<div id="userMenu" class="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-lg overflow-hidden opacity-0 invisible transform -translate-y-2 transition-all duration-300 z-50">
+<div class="p-4 border-b border-gray-100">
+<div class="flex items-center">
+<div class="w-12 h-12 rounded-full overflow-hidden mr-3">
+<img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20asian%20woman%2C%20minimalist%20style%2C%20neutral%20expression%2C%20high%20quality&width=80&height=80&seq=123&orientation=squarish" alt="用户头像" class="w-full h-full object-cover">
+</div>
+<div>
+<h3 class="text-gray-800 font-medium">Sarah Chen</h3>
+<p class="text-gray-500 text-xs">UI/UX Designer</p>
+</div>
+</div>
+<div class="mt-2 text-xs text-gray-500">在线</div>
+</div>
+<div class="py-2">
+<a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+<i class="ri-user-line w-5 h-5 mr-3"></i>
+<span>个人信息</span>
+</a>
+<a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+<i class="ri-gallery-line w-5 h-5 mr-3"></i>
+<span>我的作品</span>
+</a>
+<a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+<i class="ri-star-line w-5 h-5 mr-3"></i>
+<span>收藏夹</span>
+</a>
+<a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+<i class="ri-settings-3-line w-5 h-5 mr-3"></i>
+<span>账户设置</span>
+</a>
+<a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+<i class="ri-message-2-line w-5 h-5 mr-3"></i>
+<span>消息中心</span>
+<span class="ml-auto bg-primary text-white text-xs px-2 py-0.5 rounded-full">3</span>
+</a>
+</div>
+<div class="border-t border-gray-100 p-2">
+<button id="logoutBtn" class="w-full flex items-center justify-center px-4 py-2 text-red-500 hover:bg-red-50 rounded transition-colors duration-200">
+<i class="ri-logout-box-line w-5 h-5 mr-2"></i>
+<span>退出登录</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<!-- 主内容区 -->
+<main class="pt-16 pb-20 px-4 overflow-hidden">
+<!-- 通知提示 -->
+<div id="notification" class="fixed top-0 left-0 right-0 bg-green-500 text-white py-3 px-4 text-center z-50 notification hidden">
+操作成功完成！
+</div>
+<!-- 标题和添加按钮 -->
+<div class="flex items-center justify-between mb-6 mt-4">
+<h2 class="text-xl font-semibold text-gray-800">设计师作品展示</h2>
+<button id="addProductBtn" class="bg-primary hover:bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-md transition-all duration-300 cursor-pointer">
+<i class="ri-add-line ri-lg"></i>
+</button>
+</div>
+<!-- 产品卡片网格 -->
+<div class="grid grid-cols-1 gap-3 mb-8">
+<!-- 产品卡片 1 -->
+<div class="bg-white rounded shadow-sm card-shadow overflow-hidden">
+<div class="relative h-48 overflow-hidden cursor-pointer gallery-trigger">
+<img src="https://readdy.ai/api/search-image?query=modern%20minimalist%20chair%20design%2C%20light%20wood%20and%20white%20fabric%2C%20clean%20background%2C%20product%20photography%2C%20high%20quality%2C%20professional%20lighting&width=600&height=400&seq=1&orientation=landscape" alt="极简风格椅子" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+<div class="flex items-center">
+<div class="avatar-group">
+<img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20asian%20person%2C%20minimalist%20style&width=48&height=48&seq=101&orientation=squarish" class="avatar" alt="用户头像">
+<img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20middle%20aged%20asian%20person&width=48&height=48&seq=102&orientation=squarish" class="avatar" alt="用户头像">
+<img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20an%20asian%20woman&width=48&height=48&seq=103&orientation=squarish" class="avatar" alt="用户头像">
+</div>
+<span class="text-white text-sm ml-2"><span class="follow-count">0</span> 人已关注</span>
+</div>
+</div>
+</div>
+<div class="p-3">
+<h3 class="text-lg font-medium text-gray-800 mb-1">北欧极简风格椅</h3>
+<p class="text-gray-600 text-sm mb-2">采用优质白橡木与亚麻面料，简约线条设计，适合现代家居环境。</p>
+<p class="text-primary font-semibold mb-4">AUD 299</p>
+<div class="flex items-center justify-between pt-3 border-t border-gray-100">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full overflow-hidden mr-2">
+<img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20chinese%20man%2C%20minimalist%20style%2C%20neutral%20expression%2C%20high%20quality&width=80&height=80&seq=2&orientation=squarish" alt="设计师头像" class="w-full h-full object-cover">
+</div>
+<span class="text-sm text-gray-700">陈志远</span>
+</div>
+<div class="flex items-center space-x-4">
+<div class="flex items-center cursor-pointer like-button" data-liked="false" data-count="0">
+<i class="ri-heart-line ri-lg mr-1 text-gray-400"></i>
+<span class="text-sm text-gray-600 like-count">0</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- 添加产品模态框 -->
+<div id="addProductModal" class="modal fixed inset-0 flex items-center justify-center z-50">
+<div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+<div class="modal-content bg-white rounded-lg w-[343px] mx-auto p-4 relative z-10">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-lg font-semibold text-gray-800">添加新产品</h3>
+<button id="closeModalBtn" class="text-gray-500 hover:text-gray-700">
+<i class="ri-close-line ri-lg"></i>
+</button>
+</div>
+<form id="addProductForm">
+<div class="mb-4">
+<label class="block text-sm font-medium text-gray-700 mb-2">产品图片</label>
+<div id="uploadArea" class="upload-area h-40 flex flex-col items-center justify-center cursor-pointer rounded !rounded-button">
+<div id="uploadPlaceholder">
+<i class="ri-image-add-line ri-2x text-gray-400 mb-2"></i>
+<p class="text-sm text-gray-500">点击或拖拽图片到此处</p>
+</div>
+<div id="previewContainer" class="hidden w-full h-full">
+<img id="imagePreview" class="w-full h-full object-contain" src="" alt="预览图">
+</div>
+<input type="file" id="imageUpload" class="hidden" accept="image/*">
+</div>
+</div>
+<div class="mb-4">
+<label for="productName" class="block text-sm font-medium text-gray-700 mb-2">产品名称</label>
+<input type="text" id="productName" class="w-full p-2 border border-gray-200 rounded !rounded-button text-sm focus:outline-none focus:border-primary" placeholder="输入产品名称">
+</div>
+<div class="mb-4">
+<label for="productDescription" class="block text-sm font-medium text-gray-700 mb-2">产品描述</label>
+<textarea id="productDescription" rows="3" class="w-full p-2 border border-gray-200 rounded !rounded-button text-sm focus:outline-none focus:border-primary" placeholder="输入产品描述"></textarea>
+</div>
+<div class="mb-6">
+<label for="productPrice" class="block text-sm font-medium text-gray-700 mb-2">产品价格</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">AUD</span>
+<input type="text" id="productPrice" class="w-full p-2 pl-12 border border-gray-200 rounded !rounded-button text-sm focus:outline-none focus:border-primary" placeholder="输入价格">
+</div>
+</div>
+<div class="flex justify-end space-x-3">
+<button type="button" id="cancelBtn" class="px-4 py-2 border border-gray-300 rounded !rounded-button text-sm text-gray-700 hover:bg-gray-50">取消</button>
+<button type="submit" class="px-4 py-2 bg-primary hover:bg-amber-500 text-white rounded !rounded-button text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center">
+<i class="ri-check-line mr-1"></i>
+确认添加
+</button>
+</div>
+</form>
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+const userAvatar = document.getElementById('userAvatar');
+const userMenu = document.getElementById('userMenu');
+const logoutBtn = document.getElementById('logoutBtn');
+
+function toggleUserMenu() {
+  const isVisible = userMenu.classList.contains('opacity-100');
+  if (!isVisible) {
+    userMenu.classList.remove('opacity-0', 'invisible', '-translate-y-2');
+    userMenu.classList.add('opacity-100', 'visible', 'translate-y-0');
+  } else {
+    userMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+    userMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');
+  }
+}
+
+function closeUserMenu() {
+  userMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+  userMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');
+}
+
+userAvatar.addEventListener('click', function(e) {
+  e.stopPropagation();
+  toggleUserMenu();
+});
+
+document.addEventListener('click', function(e) {
+  if (!userMenu.contains(e.target)) {
+    closeUserMenu();
+  }
+});
+
+logoutBtn.addEventListener('click', function() {
+  const confirmDialog = document.createElement('div');
+  confirmDialog.className = 'fixed inset-0 flex items-center justify-center z-50';
+  confirmDialog.innerHTML = `
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    <div class="bg-white rounded-lg p-6 w-80 relative z-10 transform transition-transform duration-300">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">确认退出登录？</h3>
+      <div class="flex justify-end space-x-3">
+        <button class="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded !rounded-button transition-colors duration-200 cancel-logout">取消</button>
+        <button class="px-4 py-2 bg-red-500 text-white rounded !rounded-button hover:bg-red-600 transition-colors duration-200 confirm-logout">确认退出</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(confirmDialog);
+  
+  confirmDialog.querySelector('.cancel-logout').addEventListener('click', function() {
+    confirmDialog.remove();
+  });
+  
+  confirmDialog.querySelector('.confirm-logout').addEventListener('click', function() {
+    confirmDialog.innerHTML = `
+      <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+      <div class="bg-white rounded-lg p-6 w-80 relative z-10">
+        <div class="flex items-center justify-center">
+          <i class="ri-check-line text-green-500 text-3xl"></i>
+          <span class="ml-2 text-gray-900">退出成功</span>
+        </div>
+      </div>
+    `;
+    
+    setTimeout(() => {
+      confirmDialog.remove();
+      window.location.reload();
+    }, 1500);
+  });
+  
+  confirmDialog.querySelector('.absolute').addEventListener('click', function() {
+    confirmDialog.remove();
+  });
+});
+// 点赞功能
+const likeButtons = document.querySelectorAll('.like-button');
+likeButtons.forEach(button => {
+button.addEventListener('click', function() {
+const isLiked = this.getAttribute('data-liked') === 'true';
+const countSpan = this.querySelector('span');
+const icon = this.querySelector('i');
+let count = parseInt(this.getAttribute('data-count'));
+if (!isLiked) {
+count++;
+this.setAttribute('data-liked', 'true');
+icon.classList.remove('ri-heart-line', 'text-gray-400');
+icon.classList.add('ri-heart-fill', 'text-primary', 'heart-animation');
+} else {
+count--;
+this.setAttribute('data-liked', 'false');
+icon.classList.remove('ri-heart-fill', 'text-primary');
+icon.classList.add('ri-heart-line', 'text-gray-400');
+}
+this.setAttribute('data-count', count);
+countSpan.textContent = count;
+setTimeout(() => {
+icon.classList.remove('heart-animation');
+}, 300);
+});
+});
+// 提问功能
+const questionToggles = document.querySelectorAll('.question-toggle');
+questionToggles.forEach(toggle => {
+toggle.addEventListener('click', function() {
+const card = this.closest('.card-shadow');
+const form = card.querySelector('.question-form');
+form.classList.toggle('active');
+});
+});
+// 提问表单提交
+const questionForms = document.querySelectorAll('.question-form form');
+questionForms.forEach(form => {
+form.addEventListener('submit', function(e) {
+e.preventDefault();
+const input = this.querySelector('input');
+if (input.value.trim() !== '') {
+// 这里可以添加提交问题的逻辑
+showNotification('问题提交成功！');
+input.value = '';
+}
+});
+});
+// 添加产品模态框
+const addProductBtn = document.getElementById('addProductBtn');
+const addProductModal = document.getElementById('addProductModal');
+const closeModalBtn = document.getElementById('closeModalBtn');
+const cancelBtn = document.getElementById('cancelBtn');
+addProductBtn.addEventListener('click', function() {
+addProductModal.classList.add('active');
+});
+function closeModal() {
+addProductModal.classList.remove('active');
+}
+closeModalBtn.addEventListener('click', closeModal);
+cancelBtn.addEventListener('click', closeModal);
+// 点击模态框外部关闭
+addProductModal.addEventListener('click', function(e) {
+if (e.target === addProductModal) {
+closeModal();
+}
+});
+// 图片上传预览
+const uploadArea = document.getElementById('uploadArea');
+const imageUpload = document.getElementById('imageUpload');
+const previewContainer = document.getElementById('previewContainer');
+const imagePreview = document.getElementById('imagePreview');
+const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+uploadArea.addEventListener('click', function() {
+imageUpload.click();
+});
+uploadArea.addEventListener('dragover', function(e) {
+e.preventDefault();
+this.classList.add('border-primary', 'bg-primary', 'bg-opacity-5');
+});
+uploadArea.addEventListener('dragleave', function() {
+this.classList.remove('border-primary', 'bg-primary', 'bg-opacity-5');
+});
+uploadArea.addEventListener('drop', function(e) {
+e.preventDefault();
+this.classList.remove('border-primary', 'bg-primary', 'bg-opacity-5');
+if (e.dataTransfer.files.length) {
+imageUpload.files = e.dataTransfer.files;
+displayPreview(e.dataTransfer.files[0]);
+}
+});
+imageUpload.addEventListener('change', function() {
+if (this.files.length) {
+displayPreview(this.files[0]);
+}
+});
+function displayPreview(file) {
+if (!file.type.match('image.*')) {
+showNotification('请上传图片文件！', 'error');
+return;
+}
+const reader = new FileReader();
+reader.onload = function(e) {
+imagePreview.src = e.target.result;
+uploadPlaceholder.classList.add('hidden');
+previewContainer.classList.remove('hidden');
+}
+reader.readAsDataURL(file);
+}
+// 添加产品表单提交
+const addProductForm = document.getElementById('addProductForm');
+addProductForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const productName = document.getElementById('productName').value;
+  const productDescription = document.getElementById('productDescription').value;
+  const productPrice = document.getElementById('productPrice').value;
+  
+  if (!imageUpload.files.length) {
+    showNotification('请上传产品图片！', 'error');
+    return;
+  }
+  
+  if (!productName || !productDescription || !productPrice) {
+    showNotification('请填写完整的产品信息！', 'error');
+    return;
+  }
+  
+  // 关闭模态框
+  addProductModal.classList.remove('active');
+  
+  // 创建新产品卡片
+  const productGrid = document.querySelector('.grid');
+  const newProduct = document.createElement('div');
+  newProduct.className = 'bg-white rounded shadow-sm card-shadow overflow-hidden animate-fade-in';
+  newProduct.innerHTML = `
+    <div class="relative h-48 overflow-hidden cursor-pointer gallery-trigger">
+      <img src="${URL.createObjectURL(imageUpload.files[0])}" alt="${productName}" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+        <div class="flex items-center">
+          <div class="avatar-group">
+            <img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20asian%20person%2C%20minimalist%20style&width=48&height=48&seq=${Date.now()}&orientation=squarish" class="avatar" alt="用户头像">
+            <img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20middle%20aged%20asian%20person&width=48&height=48&seq=${Date.now()+1}&orientation=squarish" class="avatar" alt="用户头像">
+            <img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20an%20asian%20woman&width=48&height=48&seq=${Date.now()+2}&orientation=squarish" class="avatar" alt="用户头像">
+          </div>
+          <span class="text-white text-sm ml-2"><span class="follow-count">0</span> 人已关注</span>
+        </div>
+      </div>
+    </div>
+    <div class="p-3">
+      <h3 class="text-lg font-medium text-gray-800 mb-1">${productName}</h3>
+      <p class="text-gray-600 text-sm mb-2">${productDescription}</p>
+      <p class="text-primary font-semibold mb-4">AUD ${productPrice}</p>
+      <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+        <div class="flex items-center">
+          <div class="w-8 h-8 rounded-full overflow-hidden mr-2">
+            <img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20asian%20designer%2C%20minimalist%20style%2C%20neutral%20expression%2C%20high%20quality&width=80&height=80&seq=${Date.now()}&orientation=squarish" alt="设计师头像" class="w-full h-full object-cover">
+          </div>
+          <span class="text-sm text-gray-700">我</span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="flex items-center cursor-pointer like-button" data-liked="false" data-count="0">
+            <i class="ri-heart-line ri-lg mr-1 text-gray-400"></i>
+            <span class="text-sm text-gray-600 like-count">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  // 将新产品插入到网格的开头
+  productGrid.insertBefore(newProduct, productGrid.firstChild);
+  
+  // 为新产品添加交互功能
+  const newLikeButton = newProduct.querySelector('.like-button');
+  const newGalleryTrigger = newProduct.querySelector('.gallery-trigger');
+  
+  // 添加点赞功能
+  newLikeButton.addEventListener('click', function() {
+    const isLiked = this.getAttribute('data-liked') === 'true';
+    const countSpan = this.querySelector('.like-count');
+    const icon = this.querySelector('i');
+    let count = parseInt(this.getAttribute('data-count'));
+    
+    if (!isLiked) {
+      count++;
+      this.setAttribute('data-liked', 'true');
+      icon.classList.remove('ri-heart-line', 'text-gray-400');
+      icon.classList.add('ri-heart-fill', 'text-primary');
+    } else {
+      count--;
+      this.setAttribute('data-liked', 'false');
+      icon.classList.remove('ri-heart-fill', 'text-primary');
+      icon.classList.add('ri-heart-line', 'text-gray-400');
+    }
+    
+    this.setAttribute('data-count', count);
+    countSpan.textContent = count;
+  });
+  
+  // 添加画廊预览功能
+  newGalleryTrigger.addEventListener('click', function() {
+    const card = this.closest('.card-shadow');
+    // 移除之前的current-card类
+    document.querySelectorAll('.card-shadow').forEach(c => c.classList.remove('current-card'));
+    // 添加current-card类到当前卡片
+    card.classList.add('current-card');
+    
+    const productImage = this.querySelector('img').src;
+    const productTitle = card.querySelector('h3').textContent;
+    const productDesc = card.querySelector('p').textContent;
+    const productPrice = card.querySelector('.text-primary').textContent;
+    const designerAvatar = card.querySelector('.w-8.h-8 img').src;
+    const designerName = card.querySelector('.w-8.h-8 + span').textContent;
+    const likeCount = card.querySelector('.like-count').textContent;
+    const followCount = card.querySelector('.follow-count').textContent;
+    const isLiked = card.querySelector('.like-button').getAttribute('data-liked') === 'true';
+    
+    const imageGallery = document.querySelector('.image-gallery');
+    imageGallery.querySelector('.gallery-image').src = productImage;
+    imageGallery.querySelector('.product-info h3').textContent = productTitle;
+    imageGallery.querySelector('.product-info > p').textContent = productDesc;
+    imageGallery.querySelector('.product-info .text-primary').textContent = productPrice;
+    imageGallery.querySelector('.product-info img').src = designerAvatar;
+    imageGallery.querySelector('.product-info .text-white.font-medium').textContent = designerName;
+    
+    // 更新画廊中的喜欢和关注数
+    const galleryLikeCount = imageGallery.querySelector('.gallery-like-count');
+    const galleryFollowCount = imageGallery.querySelector('.gallery-follow-count');
+    const galleryLikeBtn = imageGallery.querySelector('.gallery-like-btn');
+    const galleryFollowBtn = imageGallery.querySelector('.gallery-follow-btn');
+    
+    galleryLikeCount.textContent = likeCount;
+    galleryFollowCount.textContent = followCount;
+    
+    if (isLiked) {
+      galleryLikeBtn.classList.add('bg-white/30');
+      galleryLikeBtn.querySelector('i').classList.remove('ri-heart-line');
+      galleryLikeBtn.querySelector('i').classList.add('ri-heart-fill', 'text-primary');
+    } else {
+      galleryLikeBtn.classList.remove('bg-white/30');
+      galleryLikeBtn.querySelector('i').classList.add('ri-heart-line');
+      galleryLikeBtn.querySelector('i').classList.remove('ri-heart-fill', 'text-primary');
+    }
+    
+    // 重置关注按钮状态
+    galleryFollowBtn.classList.remove('bg-white/30');
+    galleryFollowBtn.querySelector('i').classList.add('ri-user-follow-line');
+    galleryFollowBtn.querySelector('i').classList.remove('ri-user-unfollow-line', 'text-primary');
+    
+    imageGallery.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  });
+  
+  // 重置表单
+  addProductForm.reset();
+  uploadPlaceholder.classList.remove('hidden');
+  previewContainer.classList.add('hidden');
+  
+  // 显示成功通知
+  showNotification('产品添加成功！');
+  
+  // 滚动到新添加的产品
+  newProduct.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+// 通知提示
+function showNotification(message, type = 'success') {
+const notification = document.getElementById('notification');
+notification.textContent = message;
+notification.classList.remove('hidden', 'bg-green-500', 'bg-red-500');
+if (type === 'success') {
+notification.classList.add('bg-green-500');
+} else {
+notification.classList.add('bg-red-500');
+}
+notification.classList.add('notification');
+setTimeout(() => {
+notification.classList.add('hidden');
+}, 3000);
+}
+});
+</script>
+<!-- 图片预览画廊 -->
+<div class="image-gallery">
+<div class="gallery-content w-[375px] mx-auto px-4">
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-2xl font-semibold text-white">产品详情</h2>
+<button class="close-gallery text-white hover:text-gray-300">
+<i class="ri-close-line ri-2x"></i>
+</button>
+</div>
+<div class="relative">
+<img class="gallery-image" src="" alt="产品大图">
+</div>
+<div class="product-info">
+<h3 class="text-xl font-medium text-white mb-2"></h3>
+<p class="text-gray-300 mb-4"></p>
+<div class="flex items-center justify-between py-4 border-y border-white/10">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full overflow-hidden mr-2">
+<img class="w-full h-full object-cover" src="" alt="设计师头像">
+</div>
+<div>
+<p class="text-white text-sm font-medium"></p>
+<p class="text-xs text-gray-400">设计师</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<p class="text-lg font-semibold text-primary"></p>
+<button class="gallery-like-btn h-8 px-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-all duration-300 flex items-center gap-1">
+<i class="ri-heart-line text-white"></i>
+<span class="text-sm text-white gallery-like-count">0</span>
+</button>
+<button class="gallery-follow-btn h-8 px-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-all duration-300 flex items-center gap-1">
+<i class="ri-user-follow-line text-white"></i>
+<span class="text-sm text-white gallery-follow-count">0</span>
+</button>
+</div>
+</div>
+<div class="question-list">
+<h4 class="text-lg font-medium text-white mb-3">用户问答</h4>
+<div class="space-y-4 questions-container">
+<div class="bg-white/10 p-3 rounded">
+<div class="flex items-start">
+<div class="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20person%2C%20minimalist%20style&width=80&height=80&seq=1001&orientation=squarish" alt="用户头像" class="w-full h-full object-cover">
+</div>
+<div class="flex-1">
+<div class="flex items-center mb-1">
+<span class="text-sm font-medium text-white mr-2">访客</span>
+<span class="text-xs text-gray-400">2025-04-18</span>
+</div>
+<p class="text-sm text-gray-300">这个设计真的很棒，请问是否支持定制其他颜色？</p>
+<div class="mt-2">
+<button class="text-xs text-gray-400 hover:text-white flex items-center reply-btn">
+<i class="ri-reply-line mr-1"></i>回复
+</button>
+<div class="reply-form hidden mt-2">
+<div class="flex">
+<input type="text" placeholder="输入回复内容..." class="flex-1 bg-white/10 text-white border-none rounded-l !rounded-button p-2 text-xs focus:outline-none focus:bg-white/20">
+<button type="button" class="bg-primary text-white px-2 py-1 rounded-r !rounded-button text-xs hover:bg-amber-500 transition-colors duration-300 submit-reply flex items-center justify-center">
+<i class="ri-send-plane-line ri-sm mr-0.5"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="replies mt-3 space-y-2">
+<div class="bg-white/5 p-2 rounded">
+<div class="flex items-start">
+<div class="w-6 h-6 rounded-full overflow-hidden mr-2 flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20designer%2C%20minimalist%20style&width=60&height=60&seq=1002&orientation=squarish" alt="设计师头像" class="w-full h-full object-cover">
+</div>
+<div class="flex-1">
+<div class="flex items-center mb-1">
+<span class="text-xs font-medium text-primary mr-2">设计师</span>
+<span class="text-xs text-gray-400">2025-04-18</span>
+</div>
+<p class="text-xs text-gray-300">是的，我们支持定制多种颜色方案，可以根据您的具体需求来调整。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white/10 p-3 rounded mt-4">
+<div class="flex items-start">
+<div class="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20asian%20woman%2C%20minimalist%20style&width=80&height=80&seq=1003&orientation=squarish" alt="用户头像" class="w-full h-full object-cover">
+</div>
+<div class="flex-1">
+<div class="flex items-center mb-1">
+<span class="text-sm font-medium text-white mr-2">访客</span>
+<span class="text-xs text-gray-400">2025-04-18</span>
+</div>
+<p class="text-sm text-gray-300">请问这个产品的尺寸规格是多少？适合放在客厅吗？</p>
+<div class="mt-2">
+<button class="text-xs text-gray-400 hover:text-white flex items-center reply-btn">
+<i class="ri-reply-line mr-1"></i>回复
+</button>
+<div class="reply-form hidden mt-2">
+<div class="flex">
+<input type="text" placeholder="输入回复内容..." class="flex-1 bg-white/10 text-white border-none rounded-l !rounded-button p-2 text-xs focus:outline-none focus:bg-white/20">
+<button type="button" class="bg-primary text-white px-2 py-1 rounded-r !rounded-button text-xs hover:bg-amber-500 transition-colors duration-300 submit-reply flex items-center justify-center">
+<i class="ri-send-plane-line ri-sm mr-0.5"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="replies mt-3 space-y-2">
+<div class="bg-white/5 p-2 rounded">
+<div class="flex items-start">
+<div class="w-6 h-6 rounded-full overflow-hidden mr-2 flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20designer%2C%20minimalist%20style&width=60&height=60&seq=1004&orientation=squarish" alt="设计师头像" class="w-full h-full object-cover">
+</div>
+<div class="flex-1">
+<div class="flex items-center mb-1">
+<span class="text-xs font-medium text-primary mr-2">设计师</span>
+<span class="text-xs text-gray-400">2025-04-18</span>
+</div>
+<p class="text-xs text-gray-300">产品尺寸为 80x75x85cm（长x宽x高），非常适合放在客厅作为休闲椅使用。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<form id="galleryQuestionForm" class="mt-4 question-form-gallery relative">
+<div class="flex">
+<input id="galleryQuestionInput" type="text" placeholder="输入您的问题..." class="flex-1 bg-white/10 text-white border-none rounded-l !rounded-button p-2 text-sm focus:outline-none focus:bg-white/20" style="::placeholder { color: rgba(255,255,255,0.5); }">
+<button type="submit" id="galleryQuestionSubmit" class="bg-primary text-white px-4 py-2 rounded-r !rounded-button text-sm hover:bg-amber-500 transition-colors duration-300 relative group">
+发送
+<span id="submitSuccess" class="absolute -right-8 top-1/2 -translate-y-1/2 text-green-400 opacity-0 transition-all duration-300">
+<i class="ri-check-line"></i>
+</span>
+<span id="submitError" class="absolute left-1/2 -translate-x-1/2 -top-10 bg-red-500 text-white text-xs py-1 px-2 rounded opacity-0 transition-all duration-300 whitespace-nowrap pointer-events-none">
+请输入问题内容
+<span class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 border-4 border-transparent border-t-red-500"></span>
+</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+const userAvatar = document.getElementById('userAvatar');
+const userMenu = document.getElementById('userMenu');
+const logoutBtn = document.getElementById('logoutBtn');
+
+function toggleUserMenu() {
+  const isVisible = userMenu.classList.contains('opacity-100');
+  if (!isVisible) {
+    userMenu.classList.remove('opacity-0', 'invisible', '-translate-y-2');
+    userMenu.classList.add('opacity-100', 'visible', 'translate-y-0');
+  } else {
+    userMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+    userMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');
+  }
+}
+
+function closeUserMenu() {
+  userMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+  userMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');
+}
+
+userAvatar.addEventListener('click', function(e) {
+  e.stopPropagation();
+  toggleUserMenu();
+});
+
+document.addEventListener('click', function(e) {
+  if (!userMenu.contains(e.target)) {
+    closeUserMenu();
+  }
+});
+
+logoutBtn.addEventListener('click', function() {
+  const confirmDialog = document.createElement('div');
+  confirmDialog.className = 'fixed inset-0 flex items-center justify-center z-50';
+  confirmDialog.innerHTML = `
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    <div class="bg-white rounded-lg p-6 w-80 relative z-10 transform transition-transform duration-300">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">确认退出登录？</h3>
+      <div class="flex justify-end space-x-3">
+        <button class="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded !rounded-button transition-colors duration-200 cancel-logout">取消</button>
+        <button class="px-4 py-2 bg-red-500 text-white rounded !rounded-button hover:bg-red-600 transition-colors duration-200 confirm-logout">确认退出</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(confirmDialog);
+  
+  confirmDialog.querySelector('.cancel-logout').addEventListener('click', function() {
+    confirmDialog.remove();
+  });
+  
+  confirmDialog.querySelector('.confirm-logout').addEventListener('click', function() {
+    confirmDialog.innerHTML = `
+      <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+      <div class="bg-white rounded-lg p-6 w-80 relative z-10">
+        <div class="flex items-center justify-center">
+          <i class="ri-check-line text-green-500 text-3xl"></i>
+          <span class="ml-2 text-gray-900">退出成功</span>
+        </div>
+      </div>
+    `;
+    
+    setTimeout(() => {
+      confirmDialog.remove();
+      window.location.reload();
+    }, 1500);
+  });
+  
+  confirmDialog.querySelector('.absolute').addEventListener('click', function() {
+    confirmDialog.remove();
+  });
+});
+// 处理画廊中的喜欢和关注按钮
+const galleryLikeBtn = document.querySelector('.gallery-like-btn');
+const galleryFollowBtn = document.querySelector('.gallery-follow-btn');
+const galleryLikeCount = document.querySelector('.gallery-like-count');
+const galleryFollowCount = document.querySelector('.gallery-follow-count');
+
+function updateGalleryLikeButton(likeCount, isLiked) {
+  const icon = galleryLikeBtn.querySelector('i');
+  if (isLiked) {
+    icon.classList.remove('ri-heart-line');
+    icon.classList.add('ri-heart-fill', 'text-primary');
+    galleryLikeBtn.classList.add('bg-white/30');
+  } else {
+    icon.classList.add('ri-heart-line');
+    icon.classList.remove('ri-heart-fill', 'text-primary');
+    galleryLikeBtn.classList.remove('bg-white/30');
+  }
+  galleryLikeCount.textContent = likeCount;
+}
+
+function updateGalleryFollowButton(followCount, isFollowed) {
+  const icon = galleryFollowBtn.querySelector('i');
+  if (isFollowed) {
+    icon.classList.remove('ri-user-follow-line');
+    icon.classList.add('ri-user-unfollow-line', 'text-primary');
+    galleryFollowBtn.classList.add('bg-white/30');
+  } else {
+    icon.classList.add('ri-user-follow-line');
+    icon.classList.remove('ri-user-unfollow-line', 'text-primary');
+    galleryFollowBtn.classList.remove('bg-white/30');
+  }
+  galleryFollowCount.textContent = followCount;
+}
+
+galleryLikeBtn.addEventListener('click', function() {
+  const isLiked = this.classList.contains('bg-white/30');
+  const currentCount = parseInt(galleryLikeCount.textContent);
+  const newCount = isLiked ? currentCount - 1 : currentCount + 1;
+  
+  // 只更新当前产品的喜欢数
+  const currentCard = document.querySelector('.card-shadow.current-card');
+  if (currentCard) {
+    const cardLikeBtn = currentCard.querySelector('.like-button');
+    const cardLikeCount = cardLikeBtn.querySelector('span');
+    cardLikeBtn.setAttribute('data-liked', (!isLiked).toString());
+    cardLikeBtn.setAttribute('data-count', newCount);
+    cardLikeCount.textContent = newCount;
+    
+    const cardIcon = cardLikeBtn.querySelector('i');
+    if (!isLiked) {
+      cardIcon.classList.remove('ri-heart-line', 'text-gray-400');
+      cardIcon.classList.add('ri-heart-fill', 'text-primary');
+    } else {
+      cardIcon.classList.add('ri-heart-line', 'text-gray-400');
+      cardIcon.classList.remove('ri-heart-fill', 'text-primary');
+    }
+  }
+  
+  updateGalleryLikeButton(newCount, !isLiked);
+});
+
+galleryFollowBtn.addEventListener('click', function() {
+  const isFollowed = this.classList.contains('bg-white/30');
+  const currentCount = parseInt(galleryFollowCount.textContent);
+  const newCount = isFollowed ? currentCount - 1 : currentCount + 1;
+  
+  // 只更新当前产品的关注数
+  const currentCard = document.querySelector('.card-shadow.current-card');
+  if (currentCard) {
+    const followCountElement = currentCard.querySelector('.follow-count');
+    followCountElement.textContent = newCount;
+    if (!isFollowed) {
+      followCountElement.classList.add('animate');
+      setTimeout(() => followCountElement.classList.remove('animate'), 300);
+    }
+  }
+  
+  updateGalleryFollowButton(newCount, !isFollowed);
+});
+// 处理回复按钮点击事件
+document.addEventListener('click', function(e) {
+if (e.target.closest('.reply-btn')) {
+const replyBtn = e.target.closest('.reply-btn');
+const replyForm = replyBtn.nextElementSibling;
+replyForm.classList.toggle('hidden');
+}
+});
+// 处理回复提交事件
+document.addEventListener('click', function(e) {
+if (e.target.classList.contains('submit-reply')) {
+const submitBtn = e.target;
+const replyForm = submitBtn.closest('.reply-form');
+const input = replyForm.querySelector('input');
+const replyText = input.value.trim();
+const repliesContainer = replyForm.closest('.flex-1').querySelector('.replies');
+if (!replyText) {
+input.classList.add('ring-2', 'ring-red-500');
+submitBtn.classList.add('animate-shake');
+setTimeout(() => {
+input.classList.remove('ring-2', 'ring-red-500');
+submitBtn.classList.remove('animate-shake');
+}, 2000);
+return;
+}
+// 禁用提交按钮
+submitBtn.disabled = true;
+submitBtn.classList.add('opacity-70');
+const replyElement = document.createElement('div');
+replyElement.className = 'bg-white/5 p-2 rounded animate-fade-in';
+replyElement.innerHTML = `
+<div class="flex items-start">
+<div class="w-6 h-6 rounded-full overflow-hidden mr-2 flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20designer%2C%20minimalist%20style&width=60&height=60&seq=${Date.now()}&orientation=squarish" alt="设计师头像" class="w-full h-full object-cover">
+</div>
+<div class="flex-1">
+<div class="flex items-center mb-1">
+<span class="text-xs font-medium text-primary mr-2">我</span>
+<span class="text-xs text-gray-400">${new Date().toLocaleDateString()}</span>
+</div>
+<p class="text-xs text-gray-300">${replyText}</p>
+</div>
+</div>`;
+// 添加成功动画效果
+const successIcon = document.createElement('span');
+successIcon.className = 'absolute -right-8 top-1/2 -translate-y-1/2 text-green-400 opacity-0 transition-all duration-300';
+successIcon.innerHTML = '<i class="ri-check-line"></i>';
+submitBtn.appendChild(successIcon);
+// 显示成功动画
+setTimeout(() => {
+successIcon.classList.remove('opacity-0');
+successIcon.classList.add('scale-110');
+}, 100);
+// 添加回复到容器
+repliesContainer.appendChild(replyElement);
+// 清空输入框
+input.value = '';
+// 隐藏回复表单
+setTimeout(() => {
+replyForm.classList.add('hidden');
+// 移除成功图标
+successIcon.remove();
+// 重新启用提交按钮
+submitBtn.disabled = false;
+submitBtn.classList.remove('opacity-70');
+}, 1500);
+// 自动滚动到最新的回复
+replyElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+});
+// 添加输入框验证
+document.addEventListener('input', function(e) {
+if (e.target.closest('.reply-form input')) {
+const input = e.target;
+if (input.value.trim()) {
+input.classList.remove('ring-2', 'ring-red-500');
+}
+}
+});
+const galleryTriggers = document.querySelectorAll('.gallery-trigger');
+const imageGallery = document.querySelector('.image-gallery');
+const closeGallery = document.querySelector('.close-gallery');
+galleryTriggers.forEach(trigger => {
+trigger.addEventListener('click', function() {
+const card = this.closest('.card-shadow');
+// 移除之前的current-card类
+document.querySelectorAll('.card-shadow').forEach(c => c.classList.remove('current-card'));
+// 添加current-card类到当前卡片
+card.classList.add('current-card');
+const productImage = this.querySelector('img').src;
+const productTitle = card.querySelector('h3').textContent;
+const productDesc = card.querySelector('p').textContent;
+const productPrice = card.querySelector('.text-primary').textContent;
+const designerAvatar = card.querySelector('.w-8.h-8 img').src;
+const designerName = card.querySelector('.w-8.h-8 + span').textContent;
+imageGallery.querySelector('.gallery-image').src = productImage;
+imageGallery.querySelector('.product-info h3').textContent = productTitle;
+imageGallery.querySelector('.product-info > p').textContent = productDesc;
+imageGallery.querySelector('.product-info .text-primary').textContent = productPrice;
+imageGallery.querySelector('.product-info img').src = designerAvatar;
+imageGallery.querySelector('.product-info .text-white.font-medium').textContent = designerName;
+imageGallery.classList.add('active');
+document.body.style.overflow = 'hidden';
+// 添加问题提交功能
+const questionFormGallery = imageGallery.querySelector('.question-form-gallery');
+const questionsContainer = imageGallery.querySelector('.questions-container');
+const galleryQuestionForm = document.getElementById('galleryQuestionForm');
+const galleryQuestionInput = document.getElementById('galleryQuestionInput');
+const submitSuccess = document.getElementById('submitSuccess');
+galleryQuestionForm.addEventListener('submit', function(e) {
+e.preventDefault();
+const questionText = document.getElementById('galleryQuestionInput').value.trim();
+const submitError = document.getElementById('submitError');
+const submitBtn = document.getElementById('galleryQuestionSubmit');
+const submitSuccess = document.getElementById('submitSuccess');
+if (!questionText) {
+document.getElementById('galleryQuestionInput').classList.add('ring-2', 'ring-red-500');
+submitError.classList.remove('opacity-0');
+submitBtn.classList.add('animate-shake');
+setTimeout(() => {
+document.getElementById('galleryQuestionInput').classList.remove('ring-2', 'ring-red-500');
+submitError.classList.add('opacity-0');
+submitBtn.classList.remove('animate-shake');
+}, 2000);
+return;
+}
+// 禁用提交按钮，显示加载状态
+submitBtn.disabled = true;
+submitBtn.classList.add('opacity-70');
+const questionElement = document.createElement('div');
+questionElement.className = 'bg-white/10 p-3 rounded animate-fade-in';
+questionElement.innerHTML = `
+<div class="flex items-start">
+<div class="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20person%2C%20minimalist%20style&width=80&height=80&seq=${Date.now()}&orientation=squarish" alt="用户头像" class="w-full h-full object-cover">
+</div>
+<div class="flex-1">
+<div class="flex items-center mb-1">
+<span class="text-sm font-medium text-white mr-2">我</span>
+<span class="text-xs text-gray-400">${new Date().toLocaleDateString()}</span>
+</div>
+<p class="text-sm text-gray-300">${questionText}</p>
+<div class="mt-2">
+<button class="text-xs text-gray-400 hover:text-white flex items-center reply-btn">
+<i class="ri-reply-line mr-1"></i>回复
+</button>
+<div class="reply-form hidden mt-2">
+<div class="flex">
+<input type="text" placeholder="输入回复内容..." class="flex-1 bg-white/10 text-white border-none rounded-l !rounded-button p-2 text-xs focus:outline-none focus:bg-white/20">
+<button type="button" class="bg-primary text-white px-2 py-1 rounded-r !rounded-button text-xs hover:bg-amber-500 transition-colors duration-300 submit-reply flex items-center justify-center">
+<i class="ri-send-plane-line ri-sm mr-0.5"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="replies mt-3 space-y-2"></div>
+</div>
+</div>`;
+questionsContainer.appendChild(questionElement);
+// 显示成功提示
+// 显示成功状态
+document.getElementById('submitSuccess').classList.remove('opacity-0');
+document.getElementById('submitSuccess').classList.add('scale-110');
+setTimeout(() => {
+document.getElementById('submitSuccess').classList.add('opacity-0');
+document.getElementById('submitSuccess').classList.remove('scale-110');
+// 重新启用提交按钮
+document.getElementById('galleryQuestionSubmit').disabled = false;
+document.getElementById('galleryQuestionSubmit').classList.remove('opacity-70');
+}, 1500);
+// 清空输入框并保持焦点
+galleryQuestionInput.value = '';
+galleryQuestionInput.focus();
+// 自动滚动到新添加的问题
+questionElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+});
+// 输入框验证
+galleryQuestionInput.addEventListener('input', function() {
+if (this.value.trim()) {
+this.classList.remove('ring-2', 'ring-red-500');
+}
+});
+});
+});
+closeGallery.addEventListener('click', function() {
+imageGallery.classList.remove('active');
+document.body.style.overflow = '';
+});
+imageGallery.addEventListener('click', function(e) {
+if (e.target === this) {
+this.classList.remove('active');
+document.body.style.overflow = '';
+}
+});
+});
+</script>
+</body>
+</html>

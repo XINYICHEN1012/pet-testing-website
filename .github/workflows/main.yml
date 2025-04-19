@@ -1,0 +1,44 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run linting
+      run: |
+        npm install eslint --save-dev
+        npx eslint . --ext .js
+
+    - name: Check HTML files
+      run: |
+        npm install html-validator-cli --save-dev
+        npx html-validator --file ./home.html
+        npx html-validator --file ./login.html
+        npx html-validator --file ./product.html
+        npx html-validator --file "./pet personality test.html"
+
+    - name: Deploy to Netlify
+      if: success() && github.ref == 'refs/heads/main'
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      run: |
+        npm install netlify-cli -g
+        netlify deploy --prod 

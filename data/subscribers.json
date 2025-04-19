@@ -1,0 +1,124 @@
+{
+  "constants": {
+    "avatarBaseUrl": "https://readdy.ai/api/search-image?query=professional%2520headshot%2520of%2520a%2520",
+    "avatarParams": "&width=48&height=48&orientation=squarish",
+    "rewards": {
+      "survey": {
+        "points": 100,
+        "description": "Complete user survey"
+      },
+      "test": {
+        "points": 50,
+        "description": "Complete pet personality test"
+      },
+      "preorder": {
+        "points": 200,
+        "description": "Pre-order new products"
+      }
+    }
+  },
+  "subscriptionStats": {
+    "totalSubscribers": 2,
+    "activeSubscribers": 2,
+    "lastUpdated": "2024-03-20T10:00:00Z"
+  },
+  "subscribersByEmail": {
+    "user1@example.com": {
+      "id": "user1",
+      "name": "Alex Chen",
+      "avatar": {
+        "query": "young%2520asian%2520person%252C%2520minimalist%2520style",
+        "seq": 101
+      },
+      "subscription": {
+        "status": "active",
+        "startDate": "2024-03-01T08:00:00Z",
+        "lastActivity": "2024-03-20T10:00:00Z",
+        "tier": "basic"
+      },
+      "preferences": {
+        "notifications": true,
+        "categories": ["Pet Furniture", "Smart Devices"],
+        "language": "en",
+        "emailFrequency": "weekly"
+      },
+      "rewards": {
+        "points": 350,
+        "history": [
+          {
+            "type": "survey",
+            "points": 100,
+            "date": "2024-03-15T14:30:00Z",
+            "description": "Completed user survey"
+          },
+          {
+            "type": "test",
+            "points": 50,
+            "date": "2024-03-18T09:15:00Z",
+            "description": "Completed pet personality test"
+          },
+          {
+            "type": "preorder",
+            "points": 200,
+            "date": "2024-03-20T10:00:00Z",
+            "description": "Pre-ordered Smart Interactive Dog Trainer"
+          }
+        ]
+      },
+      "interactions": {
+        "likedProducts": ["1", "2"],
+        "commentedProducts": ["1"],
+        "collectedProducts": ["1"],
+        "followingProducts": ["1"],
+        "completedTests": ["pet-personality"],
+        "completedSurveys": ["user-feedback-2024"]
+      }
+    },
+    "user2@example.com": {
+      "id": "user2",
+      "name": "Sarah Lee",
+      "avatar": {
+        "query": "young%2520asian%2520woman",
+        "seq": 104
+      },
+      "subscription": {
+        "status": "active",
+        "startDate": "2024-03-15T14:30:00Z",
+        "lastActivity": "2024-03-19T16:45:00Z",
+        "tier": "basic"
+      },
+      "preferences": {
+        "notifications": false,
+        "categories": ["Smart Devices"],
+        "language": "en",
+        "emailFrequency": "monthly"
+      },
+      "rewards": {
+        "points": 150,
+        "history": [
+          {
+            "type": "survey",
+            "points": 100,
+            "date": "2024-03-16T11:20:00Z",
+            "description": "Completed user survey"
+          },
+          {
+            "type": "test",
+            "points": 50,
+            "date": "2024-03-19T16:45:00Z",
+            "description": "Completed pet personality test"
+          }
+        ]
+      },
+      "interactions": {
+        "likedProducts": ["2"],
+        "commentedProducts": ["2"],
+        "collectedProducts": [],
+        "followingProducts": ["2"],
+        "completedTests": ["pet-personality"],
+        "completedSurveys": ["user-feedback-2024"]
+      }
+    }
+  },
+  "lastUpdated": "2024-03-20T10:00:00Z"
+} 
